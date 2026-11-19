@@ -11,6 +11,7 @@
 | Проверенные факты живого кабинета | [design/LIVE-FINDINGS.md](design/LIVE-FINDINGS.md) |
 | Этапы, параллельная работа субагентов, промпты | [PLAN.md](PLAN.md) |
 | Окружение сборки (JDK 21, Android SDK, Flutter) | [BUILD-ENV.md](BUILD-ENV.md) |
+| Локальный Git-сервер и синхронизация | [GIT-SERVER.md](GIT-SERVER.md) |
 | Принятые решения | [design/APPROVAL.md](design/APPROVAL.md) |
 | Документация API и авторизации | [docs/](docs/) |
 
