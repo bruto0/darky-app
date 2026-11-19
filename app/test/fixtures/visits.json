@@ -1,0 +1,21 @@
+{
+  "total": 2,
+  "items": [
+    {
+      "id": 2001,
+      "name": "Бачата Beginner",
+      "hallName": "Зал 1",
+      "teacherName": "Мария",
+      "visit_date": "2026-11-18T19:00:00+07:00",
+      "status": "Посещено"
+    },
+    {
+      "id": 2002,
+      "name": "Сальса Open",
+      "hallName": "Зал 1",
+      "teacherName": "Игорь",
+      "visit_date": "2026-11-16T20:00:00+07:00",
+      "status": "Посещено"
+    }
+  ]
+}

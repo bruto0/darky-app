@@ -1,0 +1,33 @@
+# Flutter / Dart build artifacts
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+**/build/
+app/android/.gradle/
+**/.gradle/
+local.properties
+**/local.properties
+*.iml
+.idea/
+**/.idea/
+.vscode/
+**/.vscode/
+
+# Android artifacts/secrets
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# Logs and temporary work dirs
+*.log
+*.tmp
+.tmp-*/
+**/.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local experiments
+.dsh-*

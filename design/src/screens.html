@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>D'arky — screens</title>
+<link rel="stylesheet" href="screens.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3.6l2.62 5.31 5.86.85-4.24 4.13 1 5.84L12 16.98l-5.24 2.75 1-5.84-4.24-4.13 5.86-.85z"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="6" height="6" rx="1"/><rect x="14.5" y="3.5" width="6" height="6" rx="1"/><rect x="3.5" y="14.5" width="6" height="6" rx="1"/><path d="M14.5 14.5h2.2v2.2h-2.2zM20.5 14.5v2.2M14.5 20.5h2.2M19.2 19.2h1.3v1.3"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 8l-4 4 4 4"/><path d="M6 12h9"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><path d="M7 15h4"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9"/><path d="M9.5 4.5L12 7l2.5-2.5M9.5 19.5L12 17l2.5 2.5"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-chev-d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.5-3.6 2.7-5.5 5.5-5.5s5 1.9 5.5 5.5"/><path d="M16 5.5a3 3 0 0 1 0 5.8M17 14.7c2 .5 3.2 2.3 3.5 5.3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L12 4l8 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9.5 21v-6h5v6"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 9.5h18"/><path d="M16 14.5h2"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.9"/><path d="M11 8.5l-1.8 5 2.8 2.2V21M14.5 8.5l2 4 3 1M9.2 13.5L6 16"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10" width="15" height="10" rx="2.5"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5"/><path d="M19 12a7 7 0 1 0-1.2 5.2"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"/><circle cx="12" cy="12" r="2.7"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.5-3 7.7-7 9.5-4-1.8-7-5-7-9.5V6z"/><path d="M8.8 12.2l2.1 2.1 4.4-4.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.3 4.3L19 6.8"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18h1.2a1.8 1.8 0 0 0 0-3.6h-.7a1.8 1.8 0 0 1 0-3.6H16a5 5 0 0 0 5-5c0-3.3-4-5.8-9-5.8z"/><circle cx="7.5" cy="9" r="1.2" fill="currentColor" stroke="none"/><circle cx="10.5" cy="5.8" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="6.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="7" cy="14" r="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<div class="canvas">
+
+  <!-- ================= AUTH ================= -->
+  <section class="screen auth" id="s-auth">
+    <div class="statusbar light">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8" fill="currentColor"/><rect x="4.6" y="5" width="3" height="6" rx=".8" fill="currentColor"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8" fill="currentColor"/><rect x="13.8" y="0" width="3" height="11" rx=".8" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M1 4.2C5.2.6 10.8.6 15 4.2M3.4 6.7c2.8-2.3 6.4-2.3 9.2 0M6 9.2c1.3-1 2.7-1 4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.6" r="1" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.8" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+
+    <div class="auth-brand">
+      <div class="logo-tile">D</div>
+      <div>
+        <div class="wordmark">D'arky</div>
+        <div class="tagline">D'arky Dance · личный кабинет</div>
+      </div>
+    </div>
+
+    <div class="webview">
+      <div class="browser-bar">
+        <span class="lock"><svg><use href="#i-lock"/></svg></span>
+        <span class="domain">4621c03198bd6735334088.impulsemini.ru</span>
+        <svg><use href="#i-refresh"/></svg>
+      </div>
+      <div class="vendor">
+        <div class="vendor-head">
+          <h2>Вход в систему</h2>
+          <span class="x">×</span>
+        </div>
+        <label>Укажите телефон для входа:</label>
+        <div class="vfield">
+          <span class="flag"></span>
+          <span>+7 (900) 123-45-67</span>
+        </div>
+        <label>Укажите пароль:</label>
+        <div class="vfield">
+          <span class="dots">••••••••</span>
+          <span class="eye"><svg><use href="#i-eye"/></svg></span>
+        </div>
+        <button class="vbtn">Продолжить</button>
+        <a class="vlink">восстановить пароль</a>
+        <div class="vconsent">
+          <span class="vcheck"><svg><use href="#i-check"/></svg></span>
+          <span>Я принимаю <a>политику обработки персональных данных</a> и <a>оферту</a> на танцевальные занятия</span>
+        </div>
+      </div>
+      <div class="vendor-foot"><svg><use href="#i-lock"/></svg>Защищённое соединение · impulseCRM</div>
+    </div>
+
+    <div class="auth-note">
+      <svg><use href="#i-shield"/></svg>
+      Пароль вводится на стороне клуба и не сохраняется в приложении
+    </div>
+  </section>
+
+  <!-- ================= HOME ================= -->
+  <section class="screen" id="s-home">
+    <div class="statusbar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8" fill="currentColor"/><rect x="4.6" y="5" width="3" height="6" rx=".8" fill="currentColor"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8" fill="currentColor"/><rect x="13.8" y="0" width="3" height="11" rx=".8" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M1 4.2C5.2.6 10.8.6 15 4.2M3.4 6.7c2.8-2.3 6.4-2.3 9.2 0M6 9.2c1.3-1 2.7-1 4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.6" r="1" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.8" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+
+    <header class="app-header">
+      <div class="avatar">АС</div>
+      <div class="who">
+        <div class="name-row"><h1>Анна Смирнова</h1></div>
+        <div class="sub"><span class="bonus"><svg><use href="#i-star"/></svg>0</span><span class="branch">D'arky Dance · Главный</span></div>
+      </div>
+      <button class="icon-btn qr"><svg><use href="#i-qr"/></svg></button>
+      <button class="icon-btn logout"><svg><use href="#i-logout"/></svg></button>
+      <button class="icon-btn more"><svg><use href="#i-more"/></svg></button>
+    </header>
+
+    <section class="account">
+      <div class="acct-top">
+        <div>
+          <div class="eyebrow">Абонемент</div>
+          <h2>Абонемент профи</h2>
+        </div>
+        <span class="status-chip">Активен</span>
+      </div>
+      <div class="packets">
+        <div class="packet"><b>20 / 24</b><span>занятий</span></div>
+        <div class="packet"><b>21 / 21</b><span>дней заморозки</span></div>
+        <div class="packet"><b>99 / 100</b><span>самоподготовка</span></div>
+        <div class="packet"><b>30 / 30</b><span>персональная диагностика</span></div>
+        <div class="packet wide"><b>3 / 3</b><span>гостевых визитов</span></div>
+      </div>
+      <div class="valid"><svg><use href="#i-cal"/></svg>Действует до 7 февраля 2027</div>
+      <div class="account-freeze">
+        <button class="btn freeze-card"><svg><use href="#i-snow"/></svg>Заморозить</button>
+      </div>
+    </section>
+
+    <section class="account standard">
+      <div class="acct-top">
+        <div>
+          <div class="eyebrow">Абонемент</div>
+          <h2>Абонемент стандарт</h2>
+        </div>
+        <span class="status-chip">Активен</span>
+      </div>
+      <div class="std-row"><b>3 / 5</b><span>занятий</span></div>
+      <div class="valid"><svg><use href="#i-cal"/></svg>Действует до 2 декабря</div>
+      <div class="freeze-unavailable"><svg><use href="#i-snow"/></svg>Заморозка не предусмотрена тарифом</div>
+    </section>
+
+    <div class="schedule-zone">
+      <div class="section-head">
+        <h2>Расписание</h2>
+        <div class="hint"><svg><use href="#i-cal"/></svg>Сегодня, 19 ноября</div>
+      </div>
+
+      <div class="filters">
+        <div class="filter">Зал <b>Все</b><svg><use href="#i-chev-d"/></svg></div>
+        <div class="filter">Преподаватель <b>Все</b><svg><use href="#i-chev-d"/></svg></div>
+      </div>
+
+      <div class="week">
+        <div class="day"><span>Пн</span><b>16</b></div>
+        <div class="day"><span>Вт</span><b>17</b></div>
+        <div class="day"><span>Ср</span><b>18</b></div>
+        <div class="day active"><span>Чт</span><b>19</b></div>
+        <div class="day"><span>Пт</span><b>20</b></div>
+        <div class="day"><span>Сб</span><b>21</b></div>
+        <div class="day"><span>Вс</span><b>22</b></div>
+        <div class="week-arrow"><svg><use href="#i-chev"/></svg></div>
+      </div>
+
+      <div class="lesson-list" id="home-list"></div>
+    </div>
+
+    <button class="fab-refresh" aria-label="Обновить расписание"><svg><use href="#i-refresh"/></svg></button>
+
+    <nav class="bottom-nav">
+      <div class="nav-item active"><svg><use href="#i-wallet"/></svg>Абонемент</div>
+      <div class="nav-item"><svg><use href="#i-walk"/></svg>Посещения</div>
+      <div class="nav-item"><svg><use href="#i-bag"/></svg>Покупки</div>
+      <div class="nav-item"><svg><use href="#i-cal"/></svg>Записи</div>
+    </nav>
+  </section>
+
+  <!-- ================= SCHEDULE (scrolled) ================= -->
+  <section class="screen" id="s-schedule">
+    <div class="statusbar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8" fill="currentColor"/><rect x="4.6" y="5" width="3" height="6" rx=".8" fill="currentColor"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8" fill="currentColor"/><rect x="13.8" y="0" width="3" height="11" rx=".8" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M1 4.2C5.2.6 10.8.6 15 4.2M3.4 6.7c2.8-2.3 6.4-2.3 9.2 0M6 9.2c1.3-1 2.7-1 4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.6" r="1" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.8" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+
+    <div class="schedule-zone" style="margin-top:6px">
+      <div class="section-head" style="margin-top:6px">
+        <h2>Расписание</h2>
+        <div class="hint"><svg><use href="#i-cal"/></svg>Сегодня, 19 ноября</div>
+      </div>
+
+      <div class="filters">
+        <div class="filter">Зал <b>Все</b><svg><use href="#i-chev-d"/></svg></div>
+        <div class="filter">Преподаватель <b>Все</b><svg><use href="#i-chev-d"/></svg></div>
+      </div>
+
+      <div class="week">
+        <div class="day"><span>Пн</span><b>16</b></div>
+        <div class="day"><span>Вт</span><b>17</b></div>
+        <div class="day"><span>Ср</span><b>18</b></div>
+        <div class="day active"><span>Чт</span><b>19</b></div>
+        <div class="day"><span>Пт</span><b>20</b></div>
+        <div class="day"><span>Сб</span><b>21</b></div>
+        <div class="day"><span>Вс</span><b>22</b></div>
+        <div class="week-arrow"><svg><use href="#i-chev"/></svg></div>
+      </div>
+
+      <div class="lesson-list" id="schedule-list"></div>
+    </div>
+
+    <button class="fab-refresh" aria-label="Обновить расписание"><svg><use href="#i-refresh"/></svg></button>
+
+    <nav class="bottom-nav">
+      <div class="nav-item active"><svg><use href="#i-wallet"/></svg>Абонемент</div>
+      <div class="nav-item"><svg><use href="#i-walk"/></svg>Посещения</div>
+      <div class="nav-item"><svg><use href="#i-bag"/></svg>Покупки</div>
+      <div class="nav-item"><svg><use href="#i-cal"/></svg>Записи</div>
+    </nav>
+  </section>
+
+  <!-- ================= VISITS ================= -->
+  <section class="screen" id="s-visits">
+    <div class="statusbar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8" fill="currentColor"/><rect x="4.6" y="5" width="3" height="6" rx=".8" fill="currentColor"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8" fill="currentColor"/><rect x="13.8" y="0" width="3" height="11" rx=".8" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M1 4.2C5.2.6 10.8.6 15 4.2M3.4 6.7c2.8-2.3 6.4-2.3 9.2 0M6 9.2c1.3-1 2.7-1 4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.6" r="1" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.8" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+
+    <div class="page-head">
+      <h1>Посещения</h1>
+      <p>89 посещений</p>
+    </div>
+
+    <div class="visit-list">
+      <article class="visit">
+        <div class="rail" style="background:#c27ba0"></div>
+        <div class="v-body">
+          <div class="v-top"><span class="date">17.11.2026</span><span class="acct">Абонемент № 514</span></div>
+          <h3>Бачата Dominican flow</h3>
+          <div class="teachers">Кальдерон Диего, Губина Наталья Леонидовна</div>
+          <div class="place"><svg><use href="#i-pin"/></svg>Главный</div>
+        </div>
+      </article>
+      <article class="visit">
+        <div class="rail" style="background:#76a5af"></div>
+        <div class="v-body">
+          <div class="v-top"><span class="date">17.11.2026</span><span class="acct">Абонемент № 514</span></div>
+          <h3>Бачата База 2.0</h3>
+          <div class="teachers">Губина Наталья Леонидовна, Вечканов Александр</div>
+          <div class="place"><svg><use href="#i-pin"/></svg>Главный</div>
+        </div>
+      </article>
+      <article class="visit">
+        <div class="rail" style="background:#d5a6bd"></div>
+        <div class="v-body">
+          <div class="v-top"><span class="date">16.11.2026</span><span class="acct">Разовое занятие</span></div>
+          <h3>Малый зал</h3>
+          <div class="teachers">Самостоятельная практика</div>
+          <div class="place"><svg><use href="#i-pin"/></svg>Главный</div>
+        </div>
+      </article>
+      <article class="visit">
+        <div class="rail" style="background:#76a5af"></div>
+        <div class="v-body">
+          <div class="v-top"><span class="date">12.11.2026</span><span class="acct">Абонемент № 514</span></div>
+          <h3>Бачата Intermediate+</h3>
+          <div class="teachers">Кальдерон Диего, Губина Наталья Леонидовна</div>
+          <div class="place"><svg><use href="#i-pin"/></svg>Главный</div>
+        </div>
+      </article>
+      <article class="visit">
+        <div class="rail" style="background:#c27ba0"></div>
+        <div class="v-body">
+          <div class="v-top"><span class="date">10.11.2026</span><span class="acct">Абонемент № 381</span></div>
+          <h3>Бачата База 2.0</h3>
+          <div class="teachers">Губина Наталья Леонидовна</div>
+          <div class="place"><svg><use href="#i-pin"/></svg>Главный</div>
+        </div>
+      </article>
+    </div>
+
+    <nav class="bottom-nav">
+      <div class="nav-item"><svg><use href="#i-wallet"/></svg>Абонемент</div>
+      <div class="nav-item active"><svg><use href="#i-walk"/></svg>Посещения</div>
+      <div class="nav-item"><svg><use href="#i-bag"/></svg>Покупки</div>
+      <div class="nav-item"><svg><use href="#i-cal"/></svg>Записи</div>
+    </nav>
+  </section>
+
+  <!-- ================= PURCHASES ================= -->
+  <section class="screen" id="s-purchases">
+    <div class="statusbar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8" fill="currentColor"/><rect x="4.6" y="5" width="3" height="6" rx=".8" fill="currentColor"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8" fill="currentColor"/><rect x="13.8" y="0" width="3" height="11" rx=".8" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M1 4.2C5.2.6 10.8.6 15 4.2M3.4 6.7c2.8-2.3 6.4-2.3 9.2 0M6 9.2c1.3-1 2.7-1 4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.6" r="1" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.8" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+
+    <div class="page-head">
+      <h1>Покупки</h1>
+      <p>9 операций · оплата и пополнения</p>
+    </div>
+
+    <div class="month">Ноябрь 2026</div>
+    <div class="purchase-list">
+      <div class="purchase">
+        <div class="p-date">10.11</div>
+        <div class="p-body"><b>Оплата группового абонемента</b><span>Картой · абонемент № 514</span></div>
+        <div class="sum">10 350 ₽</div>
+      </div>
+    </div>
+
+    <div class="month">Сентябрь 2026</div>
+    <div class="purchase-list">
+      <div class="purchase">
+        <div class="p-date">29.09</div>
+        <div class="p-body"><b>Оплата индивидуального абонемента</b><span>Картой</span></div>
+        <div class="sum">9 900 ₽</div>
+      </div>
+      <div class="purchase">
+        <div class="p-date">21.09</div>
+        <div class="p-body"><b>Оплата индивидуального занятия</b><span>Картой</span></div>
+        <div class="sum">2 200 ₽</div>
+      </div>
+      <div class="purchase">
+        <div class="p-date">06.09</div>
+        <div class="p-body"><b>Пополнение счета</b><span>Картой</span></div>
+        <div class="sum">11 500 ₽</div>
+      </div>
+      <div class="purchase">
+        <div class="p-date">06.09</div>
+        <div class="p-body"><b>Пополнение счета</b><span>Картой</span></div>
+        <div class="sum">11 500 ₽</div>
+      </div>
+    </div>
+
+    <div class="month">Июль 2026</div>
+    <div class="purchase-list">
+      <div class="purchase">
+        <div class="p-date">16.07</div>
+        <div class="p-body"><b>Оплата группового абонемента</b><span>Картой</span></div>
+        <div class="sum">8 200 ₽</div>
+      </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <div class="nav-item"><svg><use href="#i-wallet"/></svg>Абонемент</div>
+      <div class="nav-item"><svg><use href="#i-walk"/></svg>Посещения</div>
+      <div class="nav-item active"><svg><use href="#i-bag"/></svg>Покупки</div>
+      <div class="nav-item"><svg><use href="#i-cal"/></svg>Записи</div>
+    </nav>
+  </section>
+
+  <!-- ================= BOOKINGS ================= -->
+  <section class="screen" id="s-bookings">
+    <div class="statusbar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8" fill="currentColor"/><rect x="4.6" y="5" width="3" height="6" rx=".8" fill="currentColor"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8" fill="currentColor"/><rect x="13.8" y="0" width="3" height="11" rx=".8" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M1 4.2C5.2.6 10.8.6 15 4.2M3.4 6.7c2.8-2.3 6.4-2.3 9.2 0M6 9.2c1.3-1 2.7-1 4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.6" r="1" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.8" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+
+    <div class="page-head">
+      <h1>Записи</h1>
+      <p>1 запись</p>
+    </div>
+
+    <article class="booking-card">
+      <div class="booking-top">
+        <div class="booking-date"><b>23</b><span>ноя</span></div>
+        <div class="booking-title">
+          <div class="kind">Аренда зала</div>
+          <h3>Средний зал</h3>
+          <div class="branch">D'arky Dance · Главный</div>
+        </div>
+        <svg width="20" height="20" style="color:#b9b1c2"><use href="#i-home"/></svg>
+      </div>
+      <div class="booking-time"><svg><use href="#i-cal"/></svg>19:00–20:00 <span>· понедельник</span></div>
+      <button class="booking-cancel">Отменить запись</button>
+    </article>
+
+    <div class="booking-note">Отмена доступна не позднее чем за 30 минут до начала занятия. Запись на групповые занятия — в расписании.</div>
+
+    <div class="empty-cta">
+      <div class="ec-icon"><svg width="19" height="19"><use href="#i-cal"/></svg></div>
+      <div class="ec-body"><b>Хотите записаться?</b><span>Выберите занятие в расписании.</span></div>
+      <button>Расписание</button>
+    </div>
+
+    <nav class="bottom-nav">
+      <div class="nav-item"><svg><use href="#i-wallet"/></svg>Абонемент</div>
+      <div class="nav-item"><svg><use href="#i-walk"/></svg>Посещения</div>
+      <div class="nav-item"><svg><use href="#i-bag"/></svg>Покупки</div>
+      <div class="nav-item active"><svg><use href="#i-cal"/></svg>Записи</div>
+    </nav>
+  </section>
+
+  <!-- ================= HOME (full length) ================= -->
+  <section class="screen tall" id="s-home-long">
+    <div class="statusbar">
+      <span>9:41</span>
+      <div class="sb-icons">
+        <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8" fill="currentColor"/><rect x="4.6" y="5" width="3" height="6" rx=".8" fill="currentColor"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8" fill="currentColor"/><rect x="13.8" y="0" width="3" height="11" rx=".8" fill="currentColor"/></svg>
+        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M1 4.2C5.2.6 10.8.6 15 4.2M3.4 6.7c2.8-2.3 6.4-2.3 9.2 0M6 9.2c1.3-1 2.7-1 4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.6" r="1" fill="currentColor"/></svg>
+        <svg width="23" height="11" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.8" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+
+    <header class="app-header">
+      <div class="avatar">АС</div>
+      <div class="who">
+        <div class="name-row"><h1>Анна Смирнова</h1></div>
+        <div class="sub"><span class="bonus"><svg><use href="#i-star"/></svg>0</span><span class="branch">D'arky Dance · Главный</span></div>
+      </div>
+      <button class="icon-btn qr"><svg><use href="#i-qr"/></svg></button>
+      <button class="icon-btn logout"><svg><use href="#i-logout"/></svg></button>
+      <button class="icon-btn more"><svg><use href="#i-more"/></svg></button>
+    </header>
+
+    <section class="account">
+      <div class="acct-top">
+        <div>
+          <div class="eyebrow">Абонемент</div>
+          <h2>Абонемент профи</h2>
+        </div>
+        <span class="status-chip">Активен</span>
+      </div>
+      <div class="packets">
+        <div class="packet"><b>20 / 24</b><span>занятий</span></div>
+        <div class="packet"><b>21 / 21</b><span>дней заморозки</span></div>
+        <div class="packet"><b>99 / 100</b><span>самоподготовка</span></div>
+        <div class="packet"><b>30 / 30</b><span>персональная диагностика</span></div>
+        <div class="packet wide"><b>3 / 3</b><span>гостевых визитов</span></div>
+      </div>
+      <div class="valid"><svg><use href="#i-cal"/></svg>Действует до 7 февраля 2027</div>
+      <div class="account-freeze">
+        <button class="btn freeze-card"><svg><use href="#i-snow"/></svg>Заморозить</button>
+      </div>
+    </section>
+
+    <section class="account standard">
+      <div class="acct-top">
+        <div>
+          <div class="eyebrow">Абонемент</div>
+          <h2>Абонемент стандарт</h2>
+        </div>
+        <span class="status-chip">Активен</span>
+      </div>
+      <div class="std-row"><b>3 / 5</b><span>занятий</span></div>
+      <div class="valid"><svg><use href="#i-cal"/></svg>Действует до 2 декабря</div>
+      <div class="freeze-unavailable"><svg><use href="#i-snow"/></svg>Заморозка не предусмотрена тарифом</div>
+    </section>
+
+    <div class="schedule-zone">
+      <div class="section-head">
+        <h2>Расписание</h2>
+        <div class="hint"><svg><use href="#i-cal"/></svg>Сегодня, 19 ноября</div>
+      </div>
+
+      <div class="filters">
+        <div class="filter">Зал <b>Все</b><svg><use href="#i-chev-d"/></svg></div>
+        <div class="filter">Преподаватель <b>Все</b><svg><use href="#i-chev-d"/></svg></div>
+      </div>
+
+      <div class="week">
+        <div class="day"><span>Пн</span><b>16</b></div>
+        <div class="day"><span>Вт</span><b>17</b></div>
+        <div class="day"><span>Ср</span><b>18</b></div>
+        <div class="day active"><span>Чт</span><b>19</b></div>
+        <div class="day"><span>Пт</span><b>20</b></div>
+        <div class="day"><span>Сб</span><b>21</b></div>
+        <div class="day"><span>Вс</span><b>22</b></div>
+        <div class="week-arrow"><svg><use href="#i-chev"/></svg></div>
+      </div>
+
+      <div class="lesson-list" id="long-list"></div>
+    </div>
+
+    <button class="fab-refresh" aria-label="Обновить расписание"><svg><use href="#i-refresh"/></svg></button>
+
+    <nav class="bottom-nav">
+      <div class="nav-item active"><svg><use href="#i-wallet"/></svg>Абонемент</div>
+      <div class="nav-item"><svg><use href="#i-walk"/></svg>Посещения</div>
+      <div class="nav-item"><svg><use href="#i-bag"/></svg>Покупки</div>
+      <div class="nav-item"><svg><use href="#i-cal"/></svg>Записи</div>
+    </nav>
+  </section>
+
+  <!-- ================= THREE-DOT MENU ================= -->
+  <section class="screen" id="s-menu">
+    <div class="underlay" id="menu-underlay"></div>
+    <div class="menu-scrim"></div>
+    <div class="menu-popup">
+      <button class="menu-item">
+        <svg class="lead"><use href="#i-palette"/></svg>Тема оформления
+        <svg class="chev"><use href="#i-chev"/></svg>
+      </button>
+      <button class="menu-item">
+        <svg class="lead"><use href="#i-info"/></svg>О приложении
+      </button>
+      <div class="menu-sep"></div>
+      <div class="menu-version"><span>D'arky 1.0.0</span><span>Android 15+</span></div>
+    </div>
+  </section>
+
+  <!-- ================= THEME DIALOG ================= -->
+  <section class="screen" id="s-theme">
+    <div class="underlay" id="theme-underlay"></div>
+    <div class="dialog-scrim"></div>
+    <div class="theme-dialog">
+      <div class="dialog-head">
+        <h2>Тема оформления</h2>
+        <button class="dialog-x"><svg><use href="#i-close"/></svg></button>
+      </div>
+      <div class="dialog-sub">Оформление применится сразу</div>
+
+      <div class="theme-grid">
+        <button class="theme-tile active">
+          <div class="theme-thumb theme-light">
+            <div class="tt-top"><span class="tt-avatar"></span><span class="tt-name"></span></div>
+            <div class="tt-account"></div>
+            <div class="tt-schedule"><span class="tt-row"></span><span class="tt-row short"></span></div>
+          </div>
+          <div class="theme-label"><b>Светлая</b><span>Свет</span><span class="theme-check"><svg><use href="#i-check"/></svg></span></div>
+        </button>
+
+        <button class="theme-tile">
+          <div class="theme-thumb theme-dark">
+            <div class="tt-top"><span class="tt-avatar"></span><span class="tt-name"></span></div>
+            <div class="tt-account"></div>
+            <div class="tt-schedule"><span class="tt-row"></span><span class="tt-row short"></span></div>
+          </div>
+          <div class="theme-label"><b>Тёмная</b><span>Графит</span><span class="theme-check"><svg><use href="#i-check"/></svg></span></div>
+        </button>
+
+        <button class="theme-tile">
+          <div class="theme-thumb theme-pink">
+            <div class="tt-top"><span class="tt-avatar"></span><span class="tt-name"></span></div>
+            <div class="tt-account"></div>
+            <div class="tt-schedule"><span class="tt-row"></span><span class="tt-row short"></span></div>
+          </div>
+          <div class="theme-label"><b>Розовая</b><span>Бренд</span><span class="theme-check"><svg><use href="#i-check"/></svg></span></div>
+        </button>
+
+        <button class="theme-tile">
+          <div class="theme-thumb system">
+            <div class="tt-top"><span class="tt-avatar"></span><span class="tt-name"></span></div>
+            <div class="tt-account"></div>
+            <div class="tt-schedule"><span class="tt-row"></span><span class="tt-row short"></span></div>
+          </div>
+          <div class="theme-label"><b>Системная</b><span>Авто</span><span class="theme-check"><svg><use href="#i-check"/></svg></span></div>
+        </button>
+      </div>
+
+      <button class="dialog-done">Готово</button>
+    </div>
+  </section>
+
+  <!-- ================= THEME VARIANTS (filled by JS) ================= -->
+  <section class="screen theme-dark" id="s-home-dark"></section>
+  <section class="screen theme-pink" id="s-home-pink"></section>
+
+</div>
+
+<script>
+const lessons = [
+  { t: '12:00', d: 60, type: 'own', title: 'Анна Смирнова', teacher: 'Андрей Чистяков', hall: 'Средний зал', color: '#6c5ce7' },
+  { t: '13:00', d: 60, type: 'indiv', hall: 'Средний зал' },
+  { t: '13:00', d: 60, type: 'rent', hall: 'Большой зал' },
+  { t: '14:00', d: 60, type: 'group', title: 'Бачата Beginner', hall: 'Большой зал', subst: 'Замена: Семьянов В. С.', color: '#76a5af' },
+  { t: '16:00', d: 60, type: 'indiv', hall: 'Средний зал' },
+  { t: '17:00', d: 60, type: 'indiv', hall: 'Большой зал' },
+  { t: '18:00', d: 60, type: 'group', title: 'Бачата База 2.0', hall: 'Большой зал', subst: 'Замена: Семьянов В. С.', color: '#76a5af' },
+  { t: '18:00', d: 60, type: 'rent', hall: 'Средний зал' },
+  { t: '18:30', d: 90, type: 'rent', hall: 'Малый зал' },
+  { t: '19:00', d: 60, type: 'group', title: 'Растяжка', hall: 'Средний зал', teacher: 'Яна Ларченко', color: '#f2c94c' },
+  { t: '20:00', d: 60, type: 'group', title: 'Бачата Intermediate+', hall: 'Большой зал', color: '#76a5af' },
+  { t: '20:00', d: 60, type: 'rent', hall: 'Малый зал' },
+  { t: '21:00', d: 60, type: 'group', title: 'Бачата ледис', hall: 'Средний зал', teacher: 'Зыкова', color: '#f2c94c' },
+  { t: '21:00', d: 60, type: 'indiv', hall: 'Средний зал' },
+];
+
+function pin() { return '<svg><use href="#i-pin"/></svg>'; }
+function users() { return '<svg><use href="#i-users"/></svg>'; }
+function home() { return '<svg><use href="#i-home"/></svg>'; }
+
+function card(l) {
+  if (l.type === 'indiv' || l.type === 'rent') {
+    const word = l.type === 'rent' ? 'аренда' : 'индив';
+    const rail = l.type === 'rent' ? '#d8a0b8' : '#c9c2d2';
+    return `<article class="lesson compact">
+      <div class="time"><b>${l.t}</b><span>${l.d} мин</span></div>
+      <div class="rail" style="background:${rail}"></div>
+      <div class="body"><div class="compact-line"><span class="word ${l.type}">${word}</span><span class="hall">${l.hall}</span></div></div>
+    </article>`;
+  }
+  const own = l.type === 'own';
+  return `<article class="lesson${own ? ' own' : ''}">
+    <div class="time"><b>${l.t}</b><span>${l.d} мин</span></div>
+    <div class="rail" style="background:${l.color || '#c27ba0'}"></div>
+    <div class="body">
+      <h3>${l.title}</h3>
+      ${l.teacher ? `<div class="meta teacher">${users()}${l.teacher}</div>` : ''}
+      <div class="meta">${pin()}${l.hall}</div>
+      ${l.subst ? `<div class="subst">${l.subst}</div>` : ''}
+    </div>
+    <div class="tail">${own ? users() : l.type === 'group' ? users() : home()}</div>
+  </article>`;
+}
+
+document.getElementById('home-list').innerHTML = lessons.slice(0, 3).map(card).join('');
+document.getElementById('schedule-list').innerHTML = lessons.slice(0, 9).map(card).join('');
+document.getElementById('long-list').innerHTML = lessons.map(card).join('');
+
+function stripIds(root) {
+  root.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+}
+
+function cloneHome(targetId) {
+  const target = document.getElementById(targetId);
+  target.innerHTML = document.getElementById('s-home').innerHTML;
+  stripIds(target);
+}
+
+['menu-underlay', 'theme-underlay', 's-home-dark', 's-home-pink'].forEach(cloneHome);
+window.__ready = true;
+</script>
+</body>
+</html>

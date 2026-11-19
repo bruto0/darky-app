@@ -1,0 +1,13 @@
+{
+  "total": 1,
+  "items": [
+    {
+      "id": 4001,
+      "name": "Бачата Beginner",
+      "hallName": "Зал 1",
+      "teacherName": "Мария",
+      "startsAt": "2026-11-21T19:00:00+07:00",
+      "status": "Записан"
+    }
+  ]
+}

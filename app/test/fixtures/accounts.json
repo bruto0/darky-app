@@ -1,0 +1,35 @@
+{
+  "total": 2,
+  "items": [
+    {
+      "id": 514,
+      "typeName": "ПРОФИ",
+      "statusName": "Активен",
+      "visitsLeft": 20,
+      "visitsTotal": 24,
+      "freezeDaysLeft": 21,
+      "freezeDaysTotal": 21,
+      "freezeEnable": true,
+      "closed": false,
+      "freeze": false,
+      "validUntil": "2027-02-07",
+      "packets": [
+        { "value": 5, "days": 21, "min": "1" }
+      ]
+    },
+    {
+      "id": 10,
+      "typeName": "Стандарт",
+      "statusName": "Активен",
+      "visitsLeft": 3,
+      "visitsTotal": 5,
+      "freezeDaysLeft": 0,
+      "freezeDaysTotal": 0,
+      "freezeEnable": false,
+      "closed": false,
+      "freeze": false,
+      "validUntil": "2026-12-02",
+      "packets": []
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+ "verified_at": "2026-11-19",
+ "base_url": "https://demo.impulsecrm.ru",
+ "method": "живые запросы с ключом демо-пользователя; тестовые записи API-TEST удалены после проверки",
+ "auth": {
+  "header": "Authorization: Basic <API_KEY>",
+  "literal_key": "ok",
+  "base64_variants": "401"
+ },
+ "list_requires_param": true,
+ "delete_is_logical": true,
+ "entities": {
+  "client": {"list": "ok", "load": "ok", "create": "ok", "update": "ok_partial", "delete": "ok",
+             "required_extra": ["deposit", "bonus"],
+             "notes": "email/socialPage/address — массивы строк; update частичный"},
+  "ancestor": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok"},
+  "informer": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+               "notes": "в документации только list; CRUD работает"},
+  "pipeline": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+               "notes": "нужны number, smartSorting, triggers"},
+  "deposit": {"list": "ok", "load": "route_404", "create": "input_output_ok", "update": "none", "delete": "ok_one_per_call",
+              "notes": "удаление только по одной операции"},
+  "branch": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok", "required_extra": ["options"]},
+  "hall": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok", "required_extra": ["options"]},
+  "product": {"list": "ok", "load": "ok", "create": "ok", "update": "ok", "delete": "ok",
+              "notes": "id в ответе — массив"},
+  "teacher": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+              "required_extra": ["wageOptions", "options"]},
+  "user": {"list": "ok", "load": "ok", "create": "forbidden", "update": "not_tested", "delete": "not_tested",
+           "notes": "Текущий пользователь не может редактировать пользователей"},
+  "style": {"list": "ok", "load": "ok", "create": "ok", "update": "ok", "delete": "ok"},
+  "group": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+            "required_extra": ["status", "teacher1WageOptions", "teacher2WageOptions"]},
+  "schedule": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+               "notes": "delete: {item, date}; конфликты занятия — 200 + success:false"},
+  "group_account": {"list": "ok", "load": "ok", "create": "ok", "update": "ok", "delete": "ok",
+                    "required_extra": ["number", "payBox", "shift", "pays"]},
+  "individual_account": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+                         "required_extra": ["number", "payBox", "shift", "pays"]},
+  "self_account": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+                   "required_extra": ["number", "payBox", "shift", "pays"]},
+  "rent_account": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+                   "required_extra": ["number", "payBox", "shift", "pays"]},
+  "group_single": {"list": "ok", "load": "not_tested", "create": "ok", "update": "not_tested", "delete": "ok",
+                   "required_extra": ["payBox", "shift", "pays"]},
+  "individual_single": {"list": "ok", "load": "not_tested", "create": "ok", "update": "not_tested", "delete": "ok",
+                        "required_extra": ["payBox", "shift", "pays"]},
+  "self_single": {"list": "ok", "load": "not_tested", "create": "ok", "update": "not_tested", "delete": "ok",
+                  "required_extra": ["payBox", "shift", "pays"]},
+  "rent_single": {"list": "ok", "load": "not_tested", "create": "ok", "update": "not_tested", "delete": "ok",
+                  "required_extra": ["payBox", "shift", "pays"]},
+  "visit": {"list": "ok", "load": "route_404", "create": "route_404", "update": "route_404", "delete": "not_tested"},
+  "reservation": {"list": "ok", "load": "ok", "create": "ok", "update": "not_tested", "delete": "ok",
+                  "notes": "ответ {success:true, count:N}"}
+ },
+ "filters": {
+  "exact": "ok", "in": "ok", "date_range": "ok", "like": "ok", "null": "ok",
+  "relation_id": "ok", "field_id": "ok",
+  "not": "500", "empty": "не совпадает с NULL/FALSE", "numeric_from": "игнорируется",
+  "unknown_field": "игнорируется", "status_number": "0 записей"
+ },
+ "columns": {
+  "equal_string": "ok", "equal_number": "игнорируется", "numeric_compare": "ok",
+  "date_range": "ok", "id_compare": "0 записей", "unknown_field": "500", "without_fields_or_limit": "500"
+ },
+ "errors": {
+  "401": "{\"message\":\"Требуется аутентификация\"}",
+  "404": "HTML Yii",
+  "405": "No route found for ... Method Not Allowed",
+  "500": "plain text с SQL и стеком",
+  "business": "200 + {success:false, message}"
+ }
+}

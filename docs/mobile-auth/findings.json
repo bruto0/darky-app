@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "generatedAt": "2026-11-19",
+    "tenant": "https://4621c03198bd6735334088.impulsemini.ru",
+    "widgetId": 2,
+    "apiPrefix": "/api/public/",
+    "note": "Факты получены на живом контуре. Пароли, API-ключи, client secret и персональные данные в файл не сохранены.",
+    "docs": {
+      "index": "README.md",
+      "staff": "android-auth.md",
+      "client": "widget-auth.md",
+      "architecture": "architecture.md",
+      "gaps": "open-questions.md",
+      "vendorReport": "vendor-report.md"
+    }
+  },
+
+  "contours": {
+    "staff": {
+      "entryPage": "/login",
+      "login": {
+        "method": "POST",
+        "path": "user/login",
+        "contentType": "application/x-www-form-urlencoded",
+        "fields": ["username", "password"],
+        "success": { "success": true, "session": "<php-session-id>" },
+        "errors": [
+          { "status": 403, "message": "Укажите логин." },
+          { "status": 403, "message": "Пользователь не найден." },
+          { "status": 403, "message": "Укажите пароль." }
+        ],
+        "notes": "Капчи, CSRF-токена и обязательных cookie нет: запрос воспроизводится из curl без Referer."
+      },
+      "session": {
+        "transport": "query",
+        "param": "PHPSESSID",
+        "example": "GET /api/public/user/current?PHPSESSID=<sid>",
+        "storageHint": "localStorage.impulsecrm_session в веб-клиенте",
+        "cookieVariant": "не проверено, вероятно поддерживается"
+      },
+      "check": { "method": "GET", "path": "user/current", "anonymousStatus": 401 },
+      "auxiliary": ["user/refresh_token", "user/logout_devices", "user/forgot_password", "user/recover_password"],
+      "magicLink": "/login?auth=<base64> — автологин по ссылке; формат: base64 от перевёрнутой строки username;password, '=' заменены на '%'"
+    },
+
+    "clientWidget": {
+      "entryPage": "/widget/2",
+      "widgetConfig": { "method": "GET", "path": "widget/load/2", "authRequired": false, "type": 2, "description": "Личный кабинет клиента" },
+      "auth": {
+        "flow": ["phone_info", "check_password", "search -> client_id + secret"],
+        "credential": { "clientId": "int", "secret": "64 hex chars" },
+        "notes": "secret выдаётся методом search по одному телефону, без пароля"
+      },
+      "requestFormat": {
+        "contentType": "application/json",
+        "body": "дважды закодированный JSON: снаружи строка, внутри объект",
+        "example": "\"{\\\"phone\\\":\\\"<encoded>\\\"}\""
+      },
+      "responseFormat": {
+        "authMethods": "obfuscated string (см. encoding.obfuscation)",
+        "dataMethods": "обычный JSON"
+      }
+    }
+  },
+
+  "documentedApi": {
+    "auth": "Authorization: Basic <API_KEY>",
+    "note": "client_id+secret к документированному API не подходят",
+    "rejectedWithSecret": [
+      { "method": "GET", "path": "branch/load/1", "auth": "Authorization: Basic <secret>", "status": 401 },
+      { "method": "GET", "path": "branch/load/1", "auth": "Authorization: Bearer <secret>", "status": 401 },
+      { "method": "POST", "path": "client/list", "auth": "Authorization: Basic <secret>", "status": 401 },
+      { "method": "GET", "path": "client/load/255", "auth": "Authorization: Basic <secret>", "status": 401 }
+    ]
+  },
+
+  "endpoints": [
+    { "id": "widget.load", "method": "GET", "path": "widget/load/2", "auth": "none", "status": 200, "response": "plain", "note": "конфиг виджета: type, options, name" },
+    { "id": "phone_info", "method": "POST", "path": "widget_schedule/phone_info", "auth": "none", "body": { "phone": "<encoded>" }, "status": 200, "response": "obfuscated", "shape": { "count": 1, "ids": ["<clientId>"], "hasPassword": true } },
+    { "id": "check_password", "method": "POST", "path": "widget_schedule/check_password", "auth": "none", "body": { "phone": "<encoded>", "password": "<password>" }, "status": 200, "response": "obfuscated", "shape": { "success": true } },
+    { "id": "client_search", "method": "POST", "path": "widget_client_lk/search", "auth": "none", "body": { "phone": "<encoded>", "socialPage": null }, "status": 200, "response": "obfuscated", "note": "возвращает профиль клиента, secret и bcrypt-хеш пароля БЕЗ пароля" },
+    { "id": "lk.client_summary", "method": "POST", "path": "widget_client_lk/client_summary", "auth": "client", "body": { "client_id": "<id>", "secret": "<secret>" }, "status": 200, "response": "plain", "shape": { "hasBonusItem": true } },
+    { "id": "lk.accounts", "method": "POST", "path": "widget_client_lk/accounts", "auth": "client", "body": { "filters": { "client_id": "<id>", "secret": "<secret>" } }, "status": 200, "response": "plain", "shape": { "total": 1, "items": "абонементы: trainings, trainingsUsed, trainingsLeft" } },
+    { "id": "lk.visits", "method": "POST", "path": "widget_client_lk/visits", "auth": "client", "body": { "filters": { "client_id": "<id>", "secret": "<secret>" } }, "status": 200, "response": "plain", "shape": { "total": 89, "items": "посещения" } },
+    { "id": "lk.deposits", "method": "POST", "path": "widget_client_lk/deposits", "auth": "client", "body": { "filters": { "client_id": "<id>", "secret": "<secret>" } }, "status": 200, "response": "plain", "shape": { "total": 18 } },
+    { "id": "lk.bonuses", "method": "POST", "path": "widget_client_lk/bonuses", "auth": "client", "body": { "filters": { "client_id": "<id>", "secret": "<secret>" } }, "status": 200, "response": "plain", "shape": { "total": 3 } },
+    { "id": "lk.debts", "method": "POST", "path": "widget_client_lk/debts", "auth": "client", "body": { "client_id": "<id>", "secret": "<secret>" }, "status": 200, "response": "plain", "shape": [] },
+    { "id": "lk.reservations", "method": "POST", "path": "widget_client_lk/reservations", "auth": "client", "body": { "filters": { "client_id": "<id>", "secret": "<secret>" } }, "status": 200, "response": "plain", "shape": { "total": 0 } },
+    { "id": "lk.barcode", "method": "POST", "path": "widget_client_lk/barcode", "auth": "client", "body": { "client_id": "<id>", "secret": "<secret>", "type": 2, "seconds": 5 }, "status": 200, "response": "plain", "shape": "base64 PNG" },
+    { "id": "lk.all_levels", "method": "POST", "path": "widget_client_lk/all_levels", "auth": "client", "body": { "client_id": "<id>", "secret": "<secret>" }, "status": 200, "response": "plain", "shape": { "total": 3 } },
+    { "id": "lk.product_sections", "method": "POST", "path": "widget_client_lk/product_sections", "auth": "client", "body": { "filters": { "client_id": "<id>", "secret": "<secret>" } }, "status": 200, "response": "plain", "shape": { "total": 0 } },
+    { "id": "lk.news", "method": "POST", "path": "widget_client_lk/news", "auth": "client", "body": { "client_id": "<id>", "secret": "<secret>", "branches": [1] }, "status": 200, "response": "plain", "shape": [] },
+    { "id": "lk.stories", "method": "POST", "path": "widget_client_lk/stories", "auth": "client", "body": { "client_id": "<id>", "secret": "<secret>", "branches": [1] }, "status": 200, "response": "plain", "shape": { "items": [], "viewedStoriesIds": [] } },
+    { "id": "lk.schedule.personal", "method": "POST", "path": "widget_client_lk/schedule", "auth": "client", "body": { "filters": { "client_id": "<id>", "secret": "<secret>" } }, "status": 200, "response": "plain", "shape": { "total": 1 }, "note": "только занятия клиента; range игнорируется" },
+    { "id": "mobile.summary", "method": "POST", "path": "widget_client_mobile/summary", "auth": "client", "body": { "client_id": "<id>", "secret": "<secret>" }, "status": 200, "response": "plain", "shape": ["schedule", "reservations", "notificationCount"] },
+    { "id": "mobile.search", "method": "POST", "path": "widget_client_mobile/search", "auth": "none", "body": { "widget_id": 2, "phone": "<encoded>", "denyMessage": null }, "status": 200, "response": "plain", "note": "профиль клиента по телефону без пароля" },
+    { "id": "schedule.public.list", "method": "POST", "path": "widget_schedule/list", "auth": "none", "body": { "branch_id": 1, "range": { "from": "<unix>", "to": "<unix>" }, "filters": { "groups": true, "individuals": true, "rents": true, "branch_id": 1 } }, "status": 200, "response": "plain", "shape": { "total": 93, "items": "[]", "itemCounts": {} } },
+    { "id": "mobile.schedule.public", "method": "POST", "path": "widget_client_mobile/schedule", "auth": "none", "body": { "range": { "from": "<unix>", "to": "<unix>" }, "filters": { "groups": true, "individuals": true, "rents": true, "branch_id": 1 } }, "status": 200, "response": "plain", "note": "те же 93 записи, что widget_schedule/list; client_id/secret не нужны" },
+    { "id": "schedule.places", "method": "POST", "path": "widget_schedule/places", "auth": "none", "body": { "branch_id": 1, "range": { "from": "<unix>", "to": "<unix>" }, "filters": { "groups": true, "individuals": true, "rents": true, "branch_id": 1 } }, "status": 200, "response": "plain", "shape": { "group": "<...>", "self": "<...>" } },
+    { "id": "schedule.requires.params", "method": "POST", "paths": ["widget_client_lk/branch", "widget_client_lk/template", "widget_client_lk/product_types", "widget_client_lk/account_detail", "widget_schedule/reservations", "widget_schedule/waitings", "widget_schedule/changes"], "auth": "client", "status": 500, "note": "ошибка о параметрах, не о доступе" },
+    { "id": "admin.closed", "method": "POST", "paths": ["widget/list", "widget_pbx/history", "widget_chat/iframe_url"], "auth": "client", "status": 401, "note": "админские методы, клиентские креды не подходят" }
+  ],
+
+  "encoding": {
+    "phone": {
+      "algorithm": "base64(reverse(base36(int(phoneDigits) + 49680531)))",
+      "example": "+79001234567 -> cWdndmNiMDE=",
+      "details": "samples/phone-encode.md"
+    },
+    "obfuscation": {
+      "xorKey": "x7K2mQ9pL4",
+      "separator": "2RnZGYNCmdmZGdkZg0KZ2ZkDQpn",
+      "decrypt": "split(reverse(payload) XOR xorKey, separator) -> concat -> reverse -> base64decode",
+      "appliesTo": ["phone_info", "check_password", "widget_client_lk/search"],
+      "notAppliesTo": ["accounts", "visits", "deposits", "schedule", "widget_schedule/list"]
+    },
+    "requestBody": "double JSON: JSON.stringify(JSON.stringify(object))"
+  },
+
+  "schedule": {
+    "types": [
+      { "type": 0, "title": "Группа", "count14d": 34, "clientField": null },
+      { "type": 1, "title": "Индивидуальное занятие", "count14d": 41, "clientField": "объект client (id, ФИО, статус, депозит, бонусы, ltv/rfm)" },
+      { "type": 2, "title": "Аренда", "count14d": 18, "clientField": "объект client (то же)" }
+    ],
+    "itemFields": ["group", "teacher1", "teacher2", "style", "teacher", "client", "regular", "date", "dateBegin", "dateEnd", "day", "minutesBegin", "minutesEnd", "color", "type", "typeTitle", "hall", "note", "payment", "wage", "id", "entity"],
+    "clientIdPath": "item.client.id",
+    "note": "отдельного поля client_id нет"
+  },
+
+  "securityIssues": [
+    { "id": "S1", "severity": "critical", "title": "secret клиента выдаётся по одному номеру телефона", "evidence": "POST widget_client_lk/search с {phone} без пароля возвращает client_id и secret; с ними читаются accounts/visits/deposits" },
+    { "id": "S2", "severity": "high", "title": "bcrypt-хеш пароля клиента в ответе search", "evidence": "поле settings.password = $2y$10$..." },
+    { "id": "S3", "severity": "high", "title": "публичное расписание раскрывает ПДн клиентов", "evidence": "widget_schedule/list и widget_client_mobile/schedule без авторизации отдают client (ФИО, депозит, ltv) для индивидуальных занятий и аренды" },
+    { "id": "S4", "severity": "medium", "title": "возможная SQL-инъекция в widget_rent/rents", "evidence": "500 с обрывком 'select id from client where deleted is NULL AND '" },
+    { "id": "S5", "severity": "medium", "title": "открытый CORS и отсутствие лимита попыток", "evidence": "Access-Control-Allow-Origin отражает Origin; 5 неудачных логинов подряд без блокировки" },
+    { "id": "S6", "severity": "low", "title": "отладочные стеки и пути сервера в ответах 500", "evidence": "TypeError с /var/www/... в теле ответа" }
+  ],
+
+  "scripts": {
+    "check-auth.ps1": "вход сотрудника + проверка сессии, отчёт без секретов",
+    "widget-probe.ps1": "phone_info + check_password с расшифровкой",
+    "widget-surface.ps1": "перебор клиентских методов виджета с client_id+secret"
+  }
+}

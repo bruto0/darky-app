@@ -1,0 +1,18 @@
+{
+  "total": 1,
+  "items": [
+    {
+      "id": 255,
+      "name": "Анна",
+      "lastName": "Смирнова",
+      "middleName": "Игоревна",
+      "fotoThumbUrl": null,
+      "branch": { "name": "D'arky Dance" },
+      "bonus": 0,
+      "secret": "demo-secret-not-real",
+      "settings": {
+        "password": "$2y$10$demo-only-not-a-real-hash"
+      }
+    }
+  ]
+}
