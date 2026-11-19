@@ -27,9 +27,15 @@ sealed class ApiFailure implements Exception {
       return const CancelledFailure();
     }
     if (status != null) {
+      final message = _vendorMessage(error.response?.data) ??
+          _bytesMessage(error.response?.data) ??
+          'Сервер вернул ошибку $status';
+      if (message.toLowerCase().contains('validatesecret') ||
+          message.toLowerCase().contains('logicexception')) {
+        return UnauthorizedFailure(statusCode: status);
+      }
       return VendorFailure(
-        _vendorMessage(error.response?.data) ??
-            'Сервер вернул ошибку $status',
+        message,
         statusCode: status,
       );
     }
@@ -55,6 +61,15 @@ sealed class ApiFailure implements Exception {
       }
     }
     return null;
+  }
+
+  static String? _bytesMessage(Object? data) {
+    if (data is! List<int>) return null;
+    try {
+      return _vendorMessage(utf8.decode(data));
+    } on FormatException {
+      return null;
+    }
   }
 
   @override

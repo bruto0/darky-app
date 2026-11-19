@@ -6,6 +6,9 @@ import 'package:dance/app/providers.dart';
 import 'package:dance/core/browser/browser_profile.dart';
 import 'package:dance/core/config/app_config.dart';
 import 'package:dance/core/contracts/fakes.dart';
+import 'package:dance/core/data/data_providers.dart';
+import 'package:dance/core/models/account.dart';
+import 'package:dance/core/models/schedule_item.dart';
 import 'package:dance/core/storage/json_cache.dart';
 import 'package:dance/core/storage/session.dart';
 import 'package:dance/core/ui/theme_controller.dart';
@@ -14,7 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('shell shows four tabs and the home placeholder', (tester) async {
+  testWidgets('shell shows four tabs and native home', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     final config = AppConfig.defaults;
@@ -39,6 +42,10 @@ void main() {
           appConfigProvider.overrideWithValue(config),
           sharedPreferencesProvider.overrideWithValue(prefs),
           browserProfileProvider.overrideWithValue(profile),
+          accountsProvider.overrideWith((ref) async => const <Account>[]),
+          scheduleDayProvider.overrideWith(
+            (ref, day) async => const <ScheduleItem>[],
+          ),
           authRepositoryProvider.overrideWithValue(
             FakeAuthRepository(session: session),
           ),

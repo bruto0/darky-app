@@ -16,6 +16,7 @@ void main() {
   late WidgetLkRepository repository;
   late String lastPath;
   late Map<String, dynamic> lastBody;
+  late Map<String, dynamic> scheduleBody;
 
   final session = Session(
     clientId: 255,
@@ -27,6 +28,7 @@ void main() {
   setUp(() async {
     lastPath = '';
     lastBody = {};
+    scheduleBody = {};
     server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     final config = AppConfig(
       baseUrl: 'http://127.0.0.1:${server.port}',
@@ -71,6 +73,7 @@ void main() {
           ],
         };
       } else if (path.endsWith('/widget_schedule/list')) {
+        scheduleBody = lastBody;
         payload = {
           'total': 2,
           'items': [
@@ -93,6 +96,27 @@ void main() {
             },
           ],
         };
+      } else if (path.endsWith('/widget_schedule/stickers')) {
+        payload = {
+          'total': 1,
+          'items': [
+            {
+              'schedule': {'id': 1},
+              'name': 'САМПО',
+              'color': 'FFD966',
+            },
+          ],
+        };
+      } else if (path.endsWith('/widget_schedule/changes')) {
+        payload = {
+          'total': 1,
+          'items': [
+            {
+              'schedule': {'id': 1},
+              'teacher': {'name': 'Игорь', 'lastName': 'Петров'},
+            },
+          ],
+        };
       } else if (path.endsWith('/visits')) {
         payload = {
           'total': 89,
@@ -100,8 +124,12 @@ void main() {
             {
               'id': 1,
               'visitDate': 1790000000,
-              'target': {'name': 'Бачата'},
-              'service': 514,
+              'target': {
+                'style': {'name': 'Бачата'},
+                'teacher1': {'name': 'Мария', 'lastName': 'Иванова'},
+              },
+              'service': {'number': 514},
+              'byAccount': true,
             },
           ],
         };
@@ -162,6 +190,7 @@ void main() {
     expect(lastBody['filters'], {
       'client_id': 255,
       'secret': 'demo-secret',
+      'closedAccountsShown': true,
     });
   });
 
@@ -172,20 +201,27 @@ void main() {
     expect(items.first.minutesBegin, 600);
     expect(items.first.teacherName, 'Андрей Чистяков');
     expect(items.first.isMine, isTrue);
+    expect(items.first.stickerName, 'САМПО');
+    expect(items.first.changeText, 'Замена: Игорь Петров');
     expect(items.last.isMine, isFalse);
-    expect(lastPath, '/api/public/widget_schedule/list');
-    final range = lastBody['range'] as Map;
-    // 2026-11-19 00:00 UTC+7 == 2026-11-18 17:00 UTC.
-    expect(range['from'], 1795021200);
-    expect(range['to'], 1795021200);
-    expect(lastBody['filters']['individuals'], isTrue);
+    expect(items.last.title, 'индив');
+    expect(items.last.clientName, isNull);
+    expect(lastPath, '/api/public/widget_schedule/changes');
+    final range = scheduleBody['range'] as Map;
+    // The live-verified payload uses plain UTC midnight for the day.
+    expect(range['from'], 1795046400);
+    expect(range['to'], 1795046400);
+    expect(scheduleBody['filters']['individuals'], isTrue);
   });
 
   test('loads visits with mandatory sort and dedupe-ready paging', () async {
     final page = await repository.visits(session, 2);
 
     expect(page.total, 89);
+    expect(page.items.single.title, 'Бачата');
+    expect(page.items.single.teacherNames, ['Мария Иванова']);
     expect(page.items.single.serviceNumber, 514);
+    expect(page.items.single.byAccount, isTrue);
     expect(lastBody['sort'], {'visit_date': 'desc', 'created': 'desc'});
     expect(lastBody['page'], 2);
     expect(lastBody['filters']['client_id'], 255);

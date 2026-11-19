@@ -25,6 +25,22 @@ void main() {
     expect(accounts[1].packets, isEmpty);
   });
 
+  test('freeze days are derived from the freeze packet', () {
+    final account = Account.fromJson({
+      'id': 514,
+      'typeName': 'ПРОФИ',
+      'closed': false,
+      'freeze': false,
+      'packets': [
+        {'value': 5, 'days': 21, 'min': '1'},
+      ],
+    });
+
+    expect(account.freezeDaysLeft, 21);
+    expect(account.freezeDaysTotal, 21);
+    expect(account.freezeAvailable, isTrue);
+  });
+
   test('frozen, closed and zero-day accounts are not freezable', () {
     const base = {
       'id': 1,

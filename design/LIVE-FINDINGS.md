@@ -40,6 +40,23 @@ web-сценариев; в auth он больше не используется.
   восстановления открывает Chrome. Пароль/телефон/секрет в документ не
   переносятся.
 
+### 1.3. Нативный data-layer и экраны (проверено 20.11.2026)
+
+Тот же тестовый клиент, нативный вход, запросы через `WidgetLkRepository`:
+
+- `accounts` — 2 абонемента; «Профи» с packet `days=21` → `freezeAvailable=true`,
+  «Стандарт» → `false`;
+- `widget_schedule/list` на 19.11.2026 — 20 занятий, типы 0/1/2, фильтры
+  зал/преподаватель; `stickers`/`changes` отдают `{total, items}`;
+- `visits` — 90 записей, `sort.visit_date` обязателен; `target.style.name`
+  и `service.number` — реальные поля;
+- `deposits` — 9 операций, `sum`/`sumWithSign`/`typeText`/`target.number`;
+- `widget_client_lk/schedule` — 1 аренда (23 ноября, 19:00–20:00);
+- `barcode` — 391 байт PNG (raw/JSON envelope).
+- На AVD API 37 проверены 4 таба, карточки, заморозка, расписание, история,
+  покупки и записи; на AVD API 35 сеть/System UI нестабильны (эмулятор), не
+  код приложения.
+
 ### 1.1. HTTP-идентификаторы (проверено)
 
 `widget_client_lk/accounts` принимает запросы **без User-Agent, без Referer/Origin, без cookies** — `200`, те же 2 абонемента. Проверены варианты: native-UA, Chrome-UA + `Origin`/`Referer` + `Sec-Fetch-*`, только `Content-Type`, совсем без UA. Все — `200`, то есть вендор не требует браузерных заголовков.

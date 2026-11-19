@@ -1,16 +1,19 @@
 # D'arky — Flutter app
 
-Клиент D'arky Dance для Android 15+. Foundation + Auth: темы, каркас,
-сетевой профиль L2, **нативный вход** (D15), хендофф `client_id`/`secret`,
-сессия в Keystore. Расписание, абонементы, посещения, покупки и записи —
-следующие этапы.
+Клиент D'arky Dance для Android 15+. Foundation + Auth + MVP-разделы:
+темы, каркас, сетевой профиль L2, **нативный вход** (D15),
+хендофф `client_id`/`secret`, сессия в Keystore, абонементы, расписание,
+посещения, покупки и записи. Проверено на AVD API 37 с живым API.
+
+Исторические Foundation-скриншоты (до MVP-разделов):
 
 | Светлая / розовая | Тёмная |
 |---|---|
 | ![Foundation home](docs/screenshots/foundation-home.png) | ![Foundation dark](docs/screenshots/foundation-dark.png) |
 
 Нативный вход на AVD API 35: [auth-avd.png](docs/screenshots/auth-avd.png).
-Проверено: тестовый клиент → home; кнопка восстановления открывает `/widget/2`
+Живой прогон на AVD API 37: два абонемента, 20 занятий дня, 90 посещений,
+9 операций, 1 запись, QR-баркод; кнопка восстановления открывает `/widget/2`
 во внешнем браузере.
 
 Все наблюдения по вендорскому WebView (скорость, VK-ветка, CSS, autofill,
@@ -31,7 +34,7 @@ flutter run -d emulator-5554
 
 ```powershell
 flutter analyze
-flutter test
+flutter test      # 181 tests
 flutter build apk --debug
 ```
 
@@ -41,7 +44,21 @@ APK: `app/build/app/outputs/flutter-apk/app-debug.apk`.
 
 - **4 темы** — Светлая, Тёмная «Графит», Розовая «Бренд», Системная;
   `ThemeController` + `shared_preferences`; переключение сохраняется.
-- **4 таба** — Абонемент, Посещения, Покупки, Записи; заглушки.
+- **4 таба** — Абонемент, Посещения, Покупки, Записи; реальные экраны, не заглушки.
+- **Абонемент/профиль** — `widget_client_lk/accounts`, карточки «Профи»/«Стандарт»,
+  счётчики пакетов, срок, per-account заморозка, QR (`barcode`), выход, меню `⋮`,
+  диалог четырёх тем. Расписание встроено в тот же `CustomScrollView`.
+- **Расписание** — `widget_schedule/list` + `stickers`/`changes`, день/неделя,
+  фильтры зал/преподаватель, privacy для чужих индив/аренды, FAB обновления
+  с drag/clamp и сохранением позиции.
+- **Посещения** — `widget_client_lk/visits`, сортировка `visit_date desc`,
+  пагинация 20, дедупликация, pull-to-refresh.
+- **Покупки** — `widget_client_lk/deposits`, `type [11,12,13]`, группировка
+  по месяцам, зелёные суммы, пагинация.
+- **Записи** — `widget_client_lk/schedule`, предстоящие, карточка, CTA в
+  расписание; отмена пока через кабинет клуба (endpoint не подтверждён).
+- **Данные** — `WidgetLkRepository` + `data_providers.dart`; ошибки 401/500,
+  privacy-санитайзинг расписания, barcode raw/JSON, тесты на shape.
 - **Auth (D15)** — нативный экран: телефон + пароль, `AutofillGroup` с
   `AutofillHints.username/password`, eye-toggle, ошибки API. Запросы
   `widget_schedule/phone_info` → `check_password` → `widget_client_lk/search`;

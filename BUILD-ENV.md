@@ -23,10 +23,17 @@
 
 **Foundation (реальный `app/`) 19.11.2026:** `flutter analyze` — 0, `flutter test` — 30 тестов, `flutter build apk --debug` — успешно. APK: `app/build/app/outputs/flutter-apk/app-debug.apk`. `compileSdk = 36` требуется плагинами `flutter_secure_storage` и `shared_preferences_android`; `targetSdk = minSdk = 35`, поэтому поведение Android 15 сохраняется.
 
+**MVP-разделы (20.11.2026):** реализованы профиль/абонементы, расписание
+(stickers/changes, фильтры, FAB), посещения, покупки, записи. `flutter analyze` — 0,
+`flutter test` — **181 тест**, debug APK собран. Живой прогон на **AVD API 37**
+(эмулятор `Medium_Phone_API_37.0`, сеть через NAT): нативный вход → home;
+2 абонемента, 20 занятий дня, 90 посещений, 9 операций, 1 запись, QR-баркод.
+На AVD API 35 в этом окружении сеть/System UI нестабильны (эмулятор), поэтому
+фичи проверялись на API 37.
+
 **Native Auth (20.11.2026):** `webview_flutter` удалён из зависимостей; вход —
 нативные `TextField` + `AutofillGroup`, `phone_info` → `check_password` →
 `widget_client_lk/search`, восстановление — `url_launcher` во внешний браузер.
-`flutter analyze` — 0, `flutter test` — 32, APK пересобран.
 Все ограничения/варианты WebView — [design/WEBVIEW-NOTES.md](design/WEBVIEW-NOTES.md).
 
 ## Скрипт окружения

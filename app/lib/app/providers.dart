@@ -34,7 +34,12 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   return client;
 });
 
-final branchClockProvider = Provider<BranchClock>((ref) => BranchClock());
+final branchClockProvider = Provider<BranchClock>((ref) {
+  final config = ref.watch(appConfigProvider);
+  return BranchClock(
+    offset: Duration(minutes: config.branchTimezoneOffsetMinutes),
+  );
+});
 
 final jsonCacheProvider = Provider<JsonCache>((ref) {
   throw UnimplementedError('JsonCache must be overridden at bootstrap');

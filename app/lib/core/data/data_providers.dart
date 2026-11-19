@@ -9,6 +9,7 @@ import '../models/deposit.dart';
 import '../models/paged.dart';
 import '../models/schedule_item.dart';
 import '../models/visit.dart';
+import '../network/api_failure.dart';
 import '../storage/session.dart';
 import 'widget_lk_repository.dart';
 
@@ -23,7 +24,7 @@ final widgetLkRepositoryProvider = Provider<WidgetLkRepository>((ref) {
 Session _session(Ref ref) {
   final session = ref.watch(sessionControllerProvider).valueOrNull;
   if (session == null) {
-    throw StateError('Session is required for widget data');
+    throw const UnauthorizedFailure();
   }
   return session;
 }

@@ -13,12 +13,16 @@ class Visit {
     this.byAccount,
     this.durationMinutes,
     this.styleColor,
+    this.level,
+    this.minutesBegin,
+    this.minutesEnd,
   });
 
   factory Visit.fromJson(Map<String, dynamic> json) {
     final hall = json['hall'] is Map ? json['hall'] as Map : const {};
     final teacher = json['teacher'] is Map ? json['teacher'] as Map : const {};
     final target = json['target'] is Map ? json['target'] as Map : const {};
+    final service = json['service'] is Map ? json['service'] as Map : const {};
     final branch = json['branch'] is Map ? json['branch'] as Map : const {};
     final style = target['style'] is Map
         ? target['style'] as Map
@@ -30,26 +34,36 @@ class Visit {
         : json['teachers'] is List
             ? json['teachers']
             : const [];
+    final targetTeachers = [
+      if (target['teacher1'] is Map) target['teacher1'],
+      if (target['teacher2'] is Map) target['teacher2'],
+    ];
+    final targetName = style['name']?.toString();
+    final level = target['level']?.toString();
 
     return Visit(
       id: '${json['id'] ?? ''}',
-      title: (json['name'] ??
-              json['title'] ??
-              target['name'] ??
-              target['title'])
-          ?.toString(),
+      title: targetName ??
+          (json['name'] ?? json['title'] ?? target['name'] ?? target['title'])
+              ?.toString(),
       hallName: (json['hallName'] ?? hall['name'])?.toString(),
       teacherName: (json['teacherName'] as String?) ?? _teacherName(teacher),
       visitedAt: _date(json['visit_date'] ?? json['visitDate'] ?? json['visitedAt']),
       status: json['status']?.toString(),
-      targetName: (json['targetName'] ?? target['name'])?.toString(),
-      teacherNames: _teacherList(teachers),
-      serviceNumber: (json['service'] as num?)?.toInt() ??
-          (json['serviceNumber'] as num?)?.toInt(),
+      targetName: (json['targetName'] ?? targetName)?.toString(),
+      teacherNames: _teacherList(
+        teachers.isNotEmpty ? teachers : targetTeachers,
+      ),
+      serviceNumber: _int(service['number']) ??
+          _int(json['service']) ??
+          _int(json['serviceNumber']),
       branchName: (json['branchName'] ?? branch['name'])?.toString(),
       byAccount: json['byAccount'] == true,
-      durationMinutes: (json['duration'] as num?)?.toInt(),
+      durationMinutes: _int(json['duration']),
       styleColor: style['color']?.toString(),
+      level: level,
+      minutesBegin: _int(json['minutesBegin']),
+      minutesEnd: _int(json['minutesEnd']),
     );
   }
 
@@ -66,6 +80,16 @@ class Visit {
   final bool? byAccount;
   final int? durationMinutes;
   final String? styleColor;
+  final String? level;
+  final int? minutesBegin;
+  final int? minutesEnd;
+
+  static int? _int(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
+  }
 
   static String? _teacherName(Map teacher) {
     final last = (teacher['lastName'] ?? '').toString().trim();

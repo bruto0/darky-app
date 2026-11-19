@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -72,6 +73,26 @@ class ApiClient {
         options: Options(responseType: ResponseType.bytes),
       ),
     );
+  }
+
+  Future<Uint8List> postBytes(
+    String path,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _dio.post<List<int>>(
+        path,
+        data: body,
+        options: Options(responseType: ResponseType.bytes),
+      );
+      return Uint8List.fromList(response.data ?? const <int>[]);
+    } on DioException catch (error) {
+      throw ApiFailure.fromDio(error);
+    } on ApiFailure {
+      rethrow;
+    } catch (error) {
+      throw UnknownFailure('Ошибка запроса: $error');
+    }
   }
 
   Future<String> _readText(Future<Response<List<int>>> Function() request) async {

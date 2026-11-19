@@ -20,6 +20,9 @@ class ScheduleItem {
     this.stickerName,
     this.stickerColor,
     this.changeText,
+    this.color,
+    this.regular,
+    this.dateEnd,
   });
 
   factory ScheduleItem.fromJson(Map<String, dynamic> json) {
@@ -31,6 +34,10 @@ class ScheduleItem {
         json['teacher2'] is Map ? json['teacher2'] as Map : const {};
     final client = json['client'] is Map ? json['client'] as Map : const {};
     final group = json['group'] is Map ? json['group'] as Map : const {};
+    final groupTeacher1 =
+        group['teacher1'] is Map ? group['teacher1'] as Map : const {};
+    final groupTeacher2 =
+        group['teacher2'] is Map ? group['teacher2'] as Map : const {};
     final style = json['style'] is Map ? json['style'] as Map : const {};
     final groupStyle =
         group['style'] is Map ? group['style'] as Map : const {};
@@ -39,22 +46,24 @@ class ScheduleItem {
     final groupName = (group['name'] ?? group['webHeader'])?.toString();
     final teacherName = _teacherName(teacher) ??
         _teacherName(teacher1) ??
-        _teacherName(teacher2);
+        _teacherName(teacher2) ??
+        _teacherName(groupTeacher1) ??
+        _teacherName(groupTeacher2);
 
     return ScheduleItem(
       id: '${json['id'] ?? ''}',
-      type: (json['type'] as num?)?.toInt() ?? 0,
+      type: _int(json['type']) ?? 0,
       title: name ?? styleName ?? groupName ?? 'Занятие',
       hallName: (json['hallName'] ?? hall['name'])?.toString(),
       teacherName: (json['teacherName'] as String?) ?? teacherName,
-      clientId: ((json['clientId'] ?? client['id']) as num?)?.toInt(),
+      clientId: _int(json['clientId']) ?? _int(client['id']),
       clientName: (json['clientName'] ?? _personName(client))?.toString(),
       startsAt: _date(json['startsAt'] ?? json['date']),
       endsAt: _date(json['endsAt']),
       isMine: json['isMine'] == true,
       typeTitle: json['typeTitle']?.toString(),
-      minutesBegin: (json['minutesBegin'] as num?)?.toInt(),
-      minutesEnd: (json['minutesEnd'] as num?)?.toInt(),
+      minutesBegin: _int(json['minutesBegin']),
+      minutesEnd: _int(json['minutesEnd']),
       date: _date(json['date'] ?? json['dateBegin']),
       styleName: styleName,
       groupLevel: group['level']?.toString(),
@@ -62,6 +71,9 @@ class ScheduleItem {
       stickerName: json['stickerName']?.toString(),
       stickerColor: json['stickerColor']?.toString(),
       changeText: json['changeText']?.toString(),
+      color: json['color']?.toString(),
+      regular: json['regular'] == true,
+      dateEnd: _date(json['dateEnd']),
     );
   }
 
@@ -87,26 +99,38 @@ class ScheduleItem {
   final String? stickerName;
   final String? stickerColor;
   final String? changeText;
+  final String? color;
+  final bool? regular;
+  final DateTime? dateEnd;
 
   bool get isGroup => type == 0;
   bool get isIndividual => type == 1;
   bool get isRent => type == 2;
 
   ScheduleItem copyWith({
+    String? title,
     String? stickerName,
     String? stickerColor,
     String? changeText,
     String? teacherName,
+    String? clientName,
+    String? styleName,
     bool? isMine,
+    bool clearClientName = false,
+    bool clearTeacherName = false,
+    bool clearStyleName = false,
+    bool clearChangeText = false,
   }) {
     return ScheduleItem(
       id: id,
       type: type,
-      title: title,
+      title: title ?? this.title,
       hallName: hallName,
-      teacherName: teacherName ?? this.teacherName,
+      teacherName: clearTeacherName
+          ? null
+          : (teacherName ?? this.teacherName),
       clientId: clientId,
-      clientName: clientName,
+      clientName: clearClientName ? null : (clientName ?? this.clientName),
       startsAt: startsAt,
       endsAt: endsAt,
       isMine: isMine ?? this.isMine,
@@ -114,13 +138,35 @@ class ScheduleItem {
       minutesBegin: minutesBegin,
       minutesEnd: minutesEnd,
       date: date,
-      styleName: styleName,
+      styleName: clearStyleName ? null : (styleName ?? this.styleName),
       groupLevel: groupLevel,
       branchName: branchName,
       stickerName: stickerName ?? this.stickerName,
       stickerColor: stickerColor ?? this.stickerColor,
-      changeText: changeText ?? this.changeText,
+      changeText: clearChangeText ? null : (changeText ?? this.changeText),
+      color: color,
+      regular: regular,
+      dateEnd: dateEnd,
     );
+  }
+
+  /// Removes all vendor PII/style data from a foreign individual/rent item.
+  ScheduleItem sanitizedForeign() {
+    return copyWith(
+      title: isRent ? 'аренда' : 'индив',
+      clientName: null,
+      clearClientName: true,
+      clearTeacherName: true,
+      clearStyleName: true,
+      clearChangeText: true,
+    );
+  }
+
+  static int? _int(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
   }
 
   static String? _teacherName(Map teacher) {

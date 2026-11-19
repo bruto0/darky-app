@@ -10,11 +10,11 @@ class AccountPacket {
 
   factory AccountPacket.fromJson(Map<String, dynamic> json) {
     return AccountPacket(
-      value: (json['value'] as num?)?.toInt() ?? 0,
-      days: (json['days'] as num?)?.toInt() ?? 0,
+      value: Account._int(json['value']) ?? 0,
+      days: Account._int(json['days']) ?? 0,
       minimumDays: int.tryParse('${json['min'] ?? ''}'),
-      count: (json['count'] as num?)?.toInt(),
-      used: (json['used'] as num?)?.toInt(),
+      count: Account._int(json['count']),
+      used: Account._int(json['used']),
       typeName: (json['type']?['name'] ?? json['typeName'])?.toString(),
     );
   }
@@ -55,32 +55,42 @@ class Account {
     final type = json['type'] is Map ? json['type'] as Map : const {};
     final status = json['status'] is Map ? json['status'] as Map : const {};
     final packets = json['packets'] is List ? json['packets'] as List : const [];
-    final trainings = (json['trainings'] as num?)?.toInt() ?? 0;
-    final trainingsUsed = (json['trainingsUsed'] as num?)?.toInt() ?? 0;
+    final trainings = _int(json['trainings']) ?? 0;
+    final trainingsUsed = _int(json['trainingsUsed']) ?? 0;
+    final freezeDays = _int(json['freezeDays']);
+    final packetFreezeDays = packets
+        .whereType<Map>()
+        .map((packet) => _int(packet['days']) ?? 0)
+        .fold<int>(0, (max, days) => days > max ? days : max);
+    final freezeDaysTotal = _int(json['freezeDaysTotal']) ??
+        freezeDays ??
+        (_int(freezes['total']) ?? packetFreezeDays);
+    final freezeDaysLeft =
+        _int(json['freezeDaysLeft']) ?? (_int(freezes['left']) ?? freezeDaysTotal);
 
     return Account(
-      id: (json['id'] as num?)?.toInt() ?? 0,
+      id: _int(json['id']) ?? 0,
       typeName: (json['typeName'] ?? type['name'] ?? '').toString(),
       statusName: (json['statusName'] ?? status['name'])?.toString(),
       visitsLeft:
-          ((json['visitsLeft'] ?? json['trainingsLeft'] ?? visits['left']) as num?)
-                  ?.toInt() ??
+          (_int(json['visitsLeft']) ??
+                  _int(json['trainingsLeft']) ??
+                  _int(visits['left'])) ??
               (trainings - trainingsUsed).clamp(0, 1 << 30),
       visitsTotal:
-          ((json['visitsTotal'] ?? visits['total']) as num?)?.toInt() ??
-              trainings,
-      freezeDaysLeft:
-          ((json['freezeDaysLeft'] ?? freezes['left']) as num?)?.toInt() ?? 0,
-      freezeDaysTotal:
-          ((json['freezeDaysTotal'] ?? freezes['total']) as num?)?.toInt() ?? 0,
-      freezeEnable: json['freezeEnable'] == true,
-      closed: json['closed'] == true,
-      freeze: json['freeze'] == true,
+          (_int(json['visitsTotal']) ?? _int(visits['total'])) ?? trainings,
+      freezeDaysLeft: freezeDaysLeft,
+      freezeDaysTotal: freezeDaysTotal,
+      freezeEnable: json['freezeEnable'] == null
+          ? freezeDaysTotal > 0
+          : _bool(json['freezeEnable']),
+      closed: _bool(json['closed']),
+      freeze: _bool(json['freeze']),
       validUntil: _date(json['validUntil'] ?? json['endDate']),
       entity: json['entity']?.toString(),
-      active: json['active'] != false,
+      active: json['active'] == null ? true : _bool(json['active']),
       typeColor: json['typeColor']?.toString(),
-      freezeDays: (json['freezeDays'] as num?)?.toInt(),
+      freezeDays: freezeDays,
       trainings: trainings,
       trainingsUsed: trainingsUsed,
       packets: [
@@ -111,13 +121,27 @@ class Account {
   final List<AccountPacket> packets;
 
   bool get freezeAvailable =>
-      freezeEnable &&
       active &&
       !closed &&
       !freeze &&
-      freezeDaysLeft > 0;
+      freezeDaysLeft > 0 &&
+      (freezeEnable || packets.any((packet) => packet.days > 0));
 
   bool get isActive => active && !closed;
+
+  static int? _int(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
+  }
+
+  static bool _bool(Object? value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    final text = value?.toString().toLowerCase();
+    return text == 'true' || text == '1' || text == 'yes';
+  }
 
   static DateTime? _date(Object? value) {
     if (value is num) {
@@ -130,3 +154,4 @@ class Account {
     return DateTime.tryParse('${value ?? ''}');
   }
 }
+

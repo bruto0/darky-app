@@ -26,9 +26,9 @@ class Booking {
       teacherName: (json['teacherName'] as String?) ?? _teacherName(teacher),
       startsAt: _date(json['startsAt'] ?? json['date']),
       status: json['status']?.toString(),
-      type: (json['type'] as num?)?.toInt() ?? 0,
-      minutesBegin: (json['minutesBegin'] as num?)?.toInt(),
-      minutesEnd: (json['minutesEnd'] as num?)?.toInt(),
+      type: _int(json['type']) ?? 0,
+      minutesBegin: _int(json['minutesBegin']),
+      minutesEnd: _int(json['minutesEnd']),
       date: _date(json['date'] ?? json['dateBegin']),
       branchName: (json['branchName'] ?? branch['name'])?.toString(),
       clientName: (json['clientName'] ?? _personName(client))?.toString(),
@@ -50,6 +50,13 @@ class Booking {
 
   bool get isRent => type == 2;
   bool get isIndividual => type == 1;
+
+  static int? _int(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
+  }
 
   static String? _teacherName(Map teacher) {
     final last = (teacher['lastName'] ?? '').toString().trim();

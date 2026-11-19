@@ -9,6 +9,7 @@ import '../models/paged.dart';
 import '../models/schedule_item.dart';
 import '../models/visit.dart';
 import '../network/api_client.dart';
+import '../network/api_failure.dart';
 import '../storage/session.dart';
 import '../time/branch_clock.dart';
 
@@ -28,38 +29,129 @@ class WidgetLkRepository {
   Future<List<Account>> accounts(Session session) async {
     final json = await api.post(
       '${config.apiBasePath}/widget_client_lk/accounts',
-      {'filters': _auth(session)},
+      {'filters': {..._auth(session), 'closedAccountsShown': true}},
     );
     return _items(json, Account.fromJson);
   }
 
   Future<List<ScheduleItem>> schedule(Session session, DateTime day) async {
-    final utcDay = DateTime.utc(day.year, day.month, day.day)
-        .subtract(clock.offset);
+    final utcDay = DateTime.utc(day.year, day.month, day.day);
     final seconds = utcDay.millisecondsSinceEpoch ~/ 1000;
     final json = await api.post(
       '${config.apiBasePath}/widget_schedule/list',
-      {
-        'branch_id': config.branchId,
-        'range': {'from': seconds, 'to': seconds},
-        'filters': {
-          'branch_id': config.branchId,
-          'groups': true,
-          'individuals': true,
-          'rents': true,
-          'scale': 'day',
-        },
-      },
+      _scheduleBody(seconds),
     );
     final items = _items(json, ScheduleItem.fromJson);
+    final extras = await _loadScheduleExtras(seconds);
     return [
       for (final item in items)
-        item.copyWith(
-          isMine: item.clientId == session.clientId,
-          teacherName: item.teacherName,
-          changeText: item.changeText,
-        ),
+        _sanitizeScheduleItem(_applyExtras(item, extras), session),
     ]..sort(_scheduleOrder);
+  }
+
+  Map<String, dynamic> _scheduleBody(int seconds) {
+    return {
+      'branch_id': config.branchId,
+      'range': {'from': seconds, 'to': seconds},
+      'filters': {
+        'branch_id': config.branchId,
+        'groups': true,
+        'individuals': true,
+        'rents': true,
+        'hall_id': null,
+        'style_id': null,
+        'teacher_id': null,
+        'age': null,
+        'scale': 'day',
+      },
+    };
+  }
+
+  Future<_ScheduleExtras> _loadScheduleExtras(int seconds) async {
+    final stickers = <String, String>{};
+    final colors = <String, String>{};
+    final changes = <String, String>{};
+    await Future.wait<void>([
+      api
+          .post(
+            '${config.apiBasePath}/widget_schedule/stickers',
+            _scheduleBody(seconds),
+          )
+          .then((json) {
+        for (final item in _rawItems(json)) {
+          final id = _scheduleId(item);
+          if (id == null) continue;
+          final name = item['name']?.toString();
+          final color = item['color']?.toString();
+          if (name != null && name.isNotEmpty) stickers[id] = name;
+          if (color != null && color.isNotEmpty) colors[id] = color;
+        }
+      }).catchError((_) {}),
+      api
+          .post(
+            '${config.apiBasePath}/widget_schedule/changes',
+            _scheduleBody(seconds),
+          )
+          .then((json) {
+        for (final item in _rawItems(json)) {
+          final id = _scheduleId(item);
+          if (id == null) continue;
+          final teacher = _personName(
+            item['teacher'] is Map ? item['teacher'] as Map : const {},
+          );
+          final annotation = item['annotation']?.toString();
+          final text = teacher != null ? 'Замена: $teacher' : annotation;
+          if (text != null && text.isNotEmpty) changes[id] = text;
+        }
+      }).catchError((_) {}),
+    ]);
+    return _ScheduleExtras(
+      stickers: stickers,
+      stickerColors: colors,
+      changes: changes,
+    );
+  }
+
+  ScheduleItem _applyExtras(ScheduleItem item, _ScheduleExtras extras) {
+    return item.copyWith(
+      stickerName: extras.stickers[item.id],
+      stickerColor: extras.stickerColors[item.id],
+      changeText: extras.changes[item.id],
+    );
+  }
+
+  ScheduleItem _sanitizeScheduleItem(ScheduleItem item, Session session) {
+    if ((item.isIndividual || item.isRent) &&
+        item.clientId != session.clientId) {
+      return item.sanitizedForeign().copyWith(isMine: false);
+    }
+    return item.copyWith(isMine: item.clientId == session.clientId);
+  }
+
+  String? _scheduleId(Map<String, dynamic> item) {
+    final schedule = item['schedule'];
+    if (schedule is Map) {
+      final id = schedule['id'];
+      if (id != null) return id.toString();
+    }
+    final id = item['schedule_id'] ?? item['scheduleId'];
+    return id?.toString();
+  }
+
+  List<Map<String, dynamic>> _rawItems(Map<String, dynamic> json) {
+    final raw = json['items'];
+    if (raw is! List) return const [];
+    return [
+      for (final item in raw)
+        if (item is Map) Map<String, dynamic>.from(item),
+    ];
+  }
+
+  String? _personName(Map person) {
+    final last = (person['lastName'] ?? '').toString().trim();
+    final first = (person['name'] ?? '').toString().trim();
+    final parts = [first, last].where((part) => part.isNotEmpty).toList();
+    return parts.isEmpty ? null : parts.join(' ');
   }
 
   Future<Paged<Visit>> visits(
@@ -99,8 +191,7 @@ class WidgetLkRepository {
     return _paged(json, page, Deposit.fromJson);
   }
 
-  Future<List<Booking>> bookings(Session session) async {
-    final json = await api.post(
+  Future<List<Booking>> bookings(Session session) async {    final json = await api.post(
       '${config.apiBasePath}/widget_client_lk/schedule',
       {
         'filters': _auth(session),
@@ -116,7 +207,7 @@ class WidgetLkRepository {
   }
 
   Future<Uint8List?> barcode(Session session) async {
-    final json = await api.post(
+    final bytes = await api.postBytes(
       '${config.apiBasePath}/widget_client_lk/barcode',
       {
         ..._auth(session),
@@ -124,8 +215,30 @@ class WidgetLkRepository {
         'seconds': 5,
       },
     );
-    final raw = json['barcode'] ?? json['image'] ?? json['png'];
-    if (raw is! String || raw.isEmpty) return null;
+    if (bytes.isEmpty) return null;
+    // Some tenants return the PNG itself, others a JSON/base64 envelope.
+    if (bytes.length >= 8 &&
+        bytes[0] == 0x89 &&
+        bytes[1] == 0x50 &&
+        bytes[2] == 0x4E &&
+        bytes[3] == 0x47) {
+      return bytes;
+    }
+    final text = utf8.decode(bytes, allowMalformed: true).trim();
+    if (text.isEmpty) return null;
+    String raw;
+    try {
+      final decoded = jsonDecode(text);
+      if (decoded is Map) {
+        raw = (decoded['barcode'] ?? decoded['image'] ?? decoded['png'] ?? '')
+            .toString();
+      } else {
+        raw = decoded.toString();
+      }
+    } on FormatException {
+      raw = text;
+    }
+    if (raw.isEmpty) return null;
     final normalized = raw.contains(',') ? raw.split(',').last : raw;
     try {
       return base64Decode(normalized);
@@ -143,8 +256,11 @@ class WidgetLkRepository {
     Map<String, dynamic> json,
     T Function(Map<String, dynamic>) parse,
   ) {
+    _validate(json);
     final raw = json['items'];
-    if (raw is! List) return <T>[];
+    if (raw is! List) {
+      throw const ParseFailure('В ответе клуба нет списка items');
+    }
     return [
       for (final item in raw)
         if (item is Map) parse(Map<String, dynamic>.from(item)),
@@ -157,8 +273,27 @@ class WidgetLkRepository {
     T Function(Map<String, dynamic>) parse,
   ) {
     final items = _items(json, parse);
-    final total = (json['total'] as num?)?.toInt() ?? items.length;
+    final total = (json['total'] as num?)?.toInt();
+    if (total == null) {
+      throw const ParseFailure('В ответе клуба нет total');
+    }
     return Paged(items: items, total: total, page: page);
+  }
+
+  void _validate(Map<String, dynamic> json) {
+    final message = (json['message'] ?? json['error'] ?? json['detail'])
+        ?.toString();
+    final failed = json['success'] == false;
+    if (message == null && !failed) return;
+    final lower = (message ?? '').toLowerCase();
+    if (lower.contains('validatesecret') ||
+        lower.contains('logicexception') ||
+        lower.contains('доступ') ||
+        lower.contains('сесси') ||
+        lower.contains('auth')) {
+      throw const UnauthorizedFailure();
+    }
+    throw VendorFailure(message ?? 'Клуб отклонил запрос');
   }
 
   int _scheduleOrder(ScheduleItem a, ScheduleItem b) {
@@ -169,4 +304,16 @@ class WidgetLkRepository {
     if (type != 0) return type;
     return a.title.compareTo(b.title);
   }
+}
+
+class _ScheduleExtras {
+  const _ScheduleExtras({
+    required this.stickers,
+    required this.stickerColors,
+    required this.changes,
+  });
+
+  final Map<String, String> stickers;
+  final Map<String, String> stickerColors;
+  final Map<String, String> changes;
 }

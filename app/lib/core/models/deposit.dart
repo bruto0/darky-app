@@ -14,19 +14,18 @@ class Deposit {
 
   factory Deposit.fromJson(Map<String, dynamic> json) {
     final target = json['target'] is Map ? json['target'] as Map : const {};
-    final sum = json['sum'] as num?;
+    final sum = _num(json['sum']);
     return Deposit(
       id: '${json['id'] ?? ''}',
       title: (json['name'] ?? json['title'] ?? json['typeText'])?.toString(),
-      amount: (json['amount'] ?? sum) as num?,
+      amount: _num(json['amount'] ?? sum),
       createdAt: _date(json['created'] ?? json['createdAt']),
       status: json['status']?.toString(),
       typeText: json['typeText']?.toString(),
       sum: sum,
       sumWithSign: json['sumWithSign']?.toString(),
       paymentText: json['paymentText']?.toString(),
-      targetNumber: (json['targetNumber'] as num?)?.toInt() ??
-          (target['number'] as num?)?.toInt(),
+      targetNumber: _int(json['targetNumber']) ?? _int(target['number']),
     );
   }
 
@@ -42,6 +41,19 @@ class Deposit {
   final int? targetNumber;
 
   bool get isIncome => (sum ?? amount ?? 0) >= 0;
+
+  static num? _num(Object? value) {
+    if (value is num) return value;
+    if (value is String) return num.tryParse(value.trim());
+    return null;
+  }
+
+  static int? _int(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
+  }
 
   static DateTime? _date(Object? value) {
     if (value is num) {
