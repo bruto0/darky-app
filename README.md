@@ -44,7 +44,7 @@
 . .\tools\env.ps1
 cd app
 flutter analyze   # 0 issues
-flutter test      # 181 test
+flutter test      # 181 тест
 flutter build apk --debug
 ```
 
