@@ -34,8 +34,8 @@ class WidgetLkRepository {
   }
 
   Future<List<ScheduleItem>> schedule(Session session, DateTime day) async {
-    final localDay = DateTime(day.year, day.month, day.day);
-    final utcDay = localDay.subtract(clock.offset);
+    final utcDay = DateTime.utc(day.year, day.month, day.day)
+        .subtract(clock.offset);
     final seconds = utcDay.millisecondsSinceEpoch ~/ 1000;
     final json = await api.post(
       '${config.apiBasePath}/widget_schedule/list',
