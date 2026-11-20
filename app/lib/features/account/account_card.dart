@@ -155,9 +155,10 @@ class ArchiveAccountRow extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     final validUntil = validUntilLabel(account.validUntil);
     final details = validUntil == null
-        ? '${account.visitsLeft} / ${account.visitsTotal} занятий'
-        : '${account.visitsLeft} / ${account.visitsTotal} занятий · '
-              '$validUntil';
+        ? '${account.visitsLeft} / ${account.visitsTotal} '
+              '${accountVisitsLabel(account)}'
+        : '${account.visitsLeft} / ${account.visitsTotal} '
+              '${accountVisitsLabel(account)} · $validUntil';
 
     return Container(
       key: ValueKey('archive-account-${account.id}'),
@@ -261,13 +262,17 @@ class _SingleCounter extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 2),
-          child: Text(
-            counter.label,
-            style: text.bodySmall?.copyWith(
-              color: palette.ink2,
-              fontWeight: FontWeight.w600,
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 2),
+            child: Text(
+              counter.label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: text.bodySmall?.copyWith(
+                color: palette.ink2,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ),

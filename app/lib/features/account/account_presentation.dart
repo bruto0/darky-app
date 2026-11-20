@@ -75,10 +75,13 @@ class AccountCounter {
 /// The 2x2 counter grid from the design: visits, freeze days and any
 /// count-based packets returned by the club widget.
 List<AccountCounter> accountCounters(Account account) {
+  final visitsLabel = _isIndividual(account)
+      ? 'индивидуальных занятий'
+      : 'занятий';
   final counters = <AccountCounter>[
     AccountCounter(
       value: '${account.visitsLeft} / ${account.visitsTotal}',
-      label: 'занятий',
+      label: visitsLabel,
     ),
   ];
 
@@ -110,6 +113,9 @@ List<AccountCounter> accountCounters(Account account) {
 
   return counters;
 }
+
+String accountVisitsLabel(Account account) =>
+    _isIndividual(account) ? 'индивидуальных занятий' : 'занятий';
 
 /// Cards of the group ("Профи" pink) type keep the branded gradient from the
 /// palette; individual accounts get a green tint, matching the web widget.

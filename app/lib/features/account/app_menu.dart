@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/providers.dart';
@@ -92,24 +93,6 @@ class AppMenuButton extends ConsumerWidget {
             ],
           ),
         ),
-        const PopupMenuDivider(height: 1),
-        PopupMenuItem<AppMenuAction>(
-          enabled: false,
-          height: 48,
-          child: Row(
-            children: [
-              Text(
-                "D'arky ${config.appVersion}",
-                style: text.bodySmall?.copyWith(color: palette.muted),
-              ),
-              const Spacer(),
-              Text(
-                'Android 15+',
-                style: text.bodySmall?.copyWith(color: palette.muted),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -146,6 +129,15 @@ Future<void> showAboutAppDialog(BuildContext context, AppConfig config) {
     barrierColor: Colors.black.withValues(alpha: 0.4),
     builder: (dialogContext) => _AboutAppDialog(config: config),
   );
+}
+
+Future<String> _installedVersion(AppConfig fallback) async {
+  try {
+    final info = await PackageInfo.fromPlatform();
+    return info.version;
+  } catch (_) {
+    return fallback.appVersion;
+  }
 }
 
 Future<void> _openClubLink(BuildContext context, String url) async {
@@ -221,12 +213,19 @@ class _AboutAppDialog extends StatelessWidget {
                 style: text.bodyLarge,
               ),
               const SizedBox(height: 16),
-              _AboutRow(label: 'Версия', value: config.appVersion),
+              FutureBuilder<String>(
+                future: _installedVersion(config),
+                initialData: config.appVersion,
+                builder: (context, snapshot) => _AboutRow(
+                  label: 'Версия',
+                  value: snapshot.data ?? config.appVersion,
+                ),
+              ),
               _AboutRow(label: 'Платформа', value: 'Android 15+'),
               _AboutRow(
                 label: 'Клуб',
-                value: config.origin,
-                onTap: () => _openClubLink(context, config.origin),
+                value: config.referer,
+                onTap: () => _openClubLink(context, config.referer),
               ),
               const SizedBox(height: 18),
               FilledButton(

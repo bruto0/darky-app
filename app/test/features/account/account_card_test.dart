@@ -92,6 +92,7 @@ void main() {
 
     expect(find.text('Абонемент стандарт'), findsOneWidget);
     expect(find.text('3 / 5'), findsOneWidget);
+    expect(find.text('индивидуальных занятий'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'Заморозить'), findsNothing);
     expect(find.text('Заморозка не предусмотрена тарифом'), findsOneWidget);
     expect(find.textContaining('Оплатить'), findsNothing);

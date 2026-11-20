@@ -18,7 +18,7 @@ class AppConfig {
     branchId: 1,
     branchTimezoneOffsetMinutes: 420,
     defaultChromeMajor: 156,
-    appVersion: '1.0.0',
+    appVersion: '1.0.5',
   );
 
   final String baseUrl;

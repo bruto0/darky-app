@@ -183,8 +183,8 @@ void main() {
 
     expect(find.text('Тема оформления'), findsOneWidget);
     expect(find.text('О приложении'), findsOneWidget);
-    expect(find.text("D'arky 1.0.0"), findsOneWidget);
-    expect(find.text('Android 15+'), findsOneWidget);
+    expect(find.text("D'arky 1.0.0"), findsNothing);
+    expect(find.text('Android 15+'), findsNothing);
 
     await tester.tap(find.text('Тема оформления'));
     await tester.pumpAndSettle();
