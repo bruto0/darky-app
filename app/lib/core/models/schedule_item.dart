@@ -46,24 +46,32 @@ class ScheduleItem {
     final name = (json['name'] ?? json['title'])?.toString();
     final styleName = (style['name'] ?? groupStyle['name'])?.toString();
     final groupName = (group['name'] ?? group['webHeader'])?.toString();
+    final type = _int(json['type']) ?? 0;
     final teacherName = _teacherName(teacher) ??
         _teacherName(teacher1) ??
         _teacherName(teacher2) ??
         _teacherName(groupTeacher1) ??
         _teacherName(groupTeacher2);
+    final groupTeacherName = _teacherShortName(groupTeacher1) ??
+        _teacherShortName(groupTeacher2) ??
+        _teacherShortName(teacher1) ??
+        _teacherShortName(teacher2) ??
+        _teacherShortName(teacher);
     final mainTeacherNames = _uniqueNames([
-      _teacherName(groupTeacher1),
-      _teacherName(groupTeacher2),
-      _teacherName(teacher1),
-      _teacherName(teacher2),
+      _teacherShortName(groupTeacher1),
+      _teacherShortName(groupTeacher2),
+      _teacherShortName(teacher1),
+      _teacherShortName(teacher2),
     ]);
 
     return ScheduleItem(
       id: '${json['id'] ?? ''}',
-      type: _int(json['type']) ?? 0,
+      type: type,
       title: name ?? styleName ?? groupName ?? 'Занятие',
       hallName: (json['hallName'] ?? hall['name'])?.toString(),
-      teacherName: (json['teacherName'] as String?) ?? teacherName,
+      teacherName: type == 0
+          ? groupTeacherName
+          : ((json['teacherName'] as String?) ?? teacherName),
       mainTeacherNames: mainTeacherNames,
       clientId: _int(json['clientId']) ?? _int(client['id']),
       clientName: (json['clientName'] ?? _personName(client))?.toString(),
@@ -198,6 +206,14 @@ class ScheduleItem {
       if (!names.contains(name)) names.add(name);
     }
     return names;
+  }
+
+  static String? _teacherShortName(Map teacher) {
+    final first = (teacher['name'] ?? '').toString().trim();
+    final last = (teacher['lastName'] ?? '').toString().trim();
+    final parts = [first, last].where((part) => part.isNotEmpty).toList();
+    if (parts.isEmpty) return null;
+    return parts.join(' ');
   }
 
   static String? _teacherName(Map teacher) {

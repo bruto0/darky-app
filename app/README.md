@@ -34,7 +34,7 @@ flutter run -d emulator-5554
 
 ```powershell
 flutter analyze
-flutter test      # 182 tests
+flutter test      # 183 tests
 flutter build apk --debug
 ```
 
@@ -47,7 +47,7 @@ APK: `app/build/app/outputs/flutter-apk/app-debug.apk`.
   `ThemeController` + `shared_preferences`; переключение сохраняется.
 - **4 таба** — Абонемент, Посещения, Покупки, Записи; реальные экраны, не заглушки.
 - **Абонемент/профиль** — `widget_client_lk/accounts`, карточки «Профи»/«Стандарт»,
-  счётчики пакетов, срок, per-account заморозка, QR (`barcode`), выход, меню `⋮`,
+  счётчики пакетов, срок, per-account заморозка, выход, меню `⋮`,
   диалог четырёх тем. Расписание встроено в тот же `CustomScrollView`.
 - **Расписание** — `widget_schedule/list` + `stickers`/`changes`, день/неделя,
   фильтры зал/преподаватель, privacy для чужих индив/аренды, FAB обновления

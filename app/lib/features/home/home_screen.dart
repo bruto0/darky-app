@@ -7,10 +7,8 @@ import '../../core/models/account.dart';
 import '../../core/network/api_failure.dart';
 import '../../core/ui/theme.dart';
 import '../account/account_card.dart';
-import '../account/account_presentation.dart';
 import '../account/freeze_sheet.dart';
 import '../account/logout_sheet.dart';
-import '../account/qr_sheet.dart';
 import '../schedule/schedule_fab.dart';
 import '../schedule/schedule_section.dart';
 import 'home_header.dart';
@@ -72,10 +70,6 @@ class HomeScreen extends ConsumerWidget {
                       sliver: SliverToBoxAdapter(
                         child: HomeHeader(
                           profile: session.profile,
-                          onQr: () => showQrSheet(
-                            context,
-                            clientName: profileDisplayName(session.profile),
-                          ),
                           onLogout: () => _logout(context, ref),
                         ),
                       ),

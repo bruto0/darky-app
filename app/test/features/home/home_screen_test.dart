@@ -146,7 +146,7 @@ void main() {
     expect(find.widgetWithText(FilledButton, 'Заморозить'), findsOneWidget);
     expect(find.textContaining('Оплатить'), findsNothing);
 
-    expect(find.byTooltip('Показать QR-код'), findsOneWidget);
+    expect(find.byTooltip('Показать QR-код'), findsNothing);
     expect(find.byTooltip('Выйти'), findsOneWidget);
     expect(find.byTooltip('Ещё'), findsOneWidget);
     expect(find.text('Расписание'), findsOneWidget);

@@ -5,18 +5,16 @@ import '../../core/ui/theme.dart';
 import '../account/account_presentation.dart';
 import '../account/app_menu.dart';
 
-/// Home header: D'arky brand line, profile row with avatar/name/bonus, QR,
+/// Home header: D'arky brand line, profile row with avatar/name/bonus,
 /// logout and the three-dot menu to the right of logout.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
     super.key,
     required this.profile,
-    required this.onQr,
     required this.onLogout,
   });
 
   final ClientProfile profile;
-  final VoidCallback onQr;
   final VoidCallback onLogout;
 
   @override
@@ -101,14 +99,6 @@ class HomeHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4),
-            _HeaderAction(
-              icon: Icons.qr_code_2_rounded,
-              tooltip: 'Показать QR-код',
-              background: palette.violetSoft,
-              foreground: palette.violet,
-              onTap: onQr,
-            ),
-            const SizedBox(width: 2),
             _HeaderAction(
               icon: Icons.logout_rounded,
               tooltip: 'Выйти',
