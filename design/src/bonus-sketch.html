@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D'arky — эскиз: аренда и баллы</title>
+<style>
+  :root {
+    --bg:#f4f0f5; --paper:#fffdfd; --ink:#1c1822; --ink2:#615968; --muted:#938a99;
+    --line:#e9e1eb; --pink:#c27ba0; --pink-deep:#9e5b7e; --pink-soft:#f7e6ee;
+    --violet:#6c5ce7; --violet-soft:#efeaFF; --yellow:#fff1ae; --gold:#a87815;
+    --red:#d8424f; --green:#4d9179;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#e9e3ec;color:var(--ink);font-family:'Manrope','Segoe UI',sans-serif}
+  body{padding:42px 46px 50px}
+  .board{width:1240px;margin:0 auto}
+  .top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px}
+  .eyebrow{font-size:10.5px;font-weight:800;letter-spacing:1.8px;color:var(--pink);text-transform:uppercase}
+  h1{margin:5px 0 0;font-size:30px;line-height:1.12;letter-spacing:-.6px}
+  .sub{margin:8px 0 0;color:var(--ink2);font-size:13px;line-height:1.5;max-width:850px}
+  .badge{border:1px solid var(--line);background:rgba(255,255,255,.56);border-radius:999px;padding:8px 12px;font-size:10.5px;font-weight:800;color:var(--ink2);white-space:nowrap}
+  .section{margin-top:22px}
+  .sec-head{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+  .num{width:23px;height:23px;border-radius:8px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:10.5px;font-weight:800}
+  .sec-title{font-size:13.5px;font-weight:800}
+  .hint{margin-left:auto;color:var(--ink2);font-size:11px}
+  .row{display:flex;gap:16px;align-items:stretch}
+  .panel{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 8px 20px rgba(36,24,42,.045)}
+  .panel-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+  .tag{font-size:8.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;border-radius:999px;padding:4px 8px}
+  .tag-now{color:var(--muted);border:1px solid var(--line)}
+  .tag-new{color:#fff;background:var(--ink)}
+  .phone{width:350px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:26px;padding:10px 9px 8px}
+  .screen-title{font-size:20px;font-weight:800;letter-spacing:-.2px;padding:5px 7px 0}
+  .screen-sub{font-size:10px;color:var(--muted);padding:3px 7px 9px}
+  .booking{background:#fff;border-radius:17px;padding:12px;border:1px solid #eee6ef}
+  .b-top{display:flex;gap:10px;align-items:flex-start}
+  .b-date{width:45px;flex:0 0 45px;border-radius:10px;background:var(--pink-soft);padding:7px 4px;text-align:center}
+  .b-date .d{font-size:18px;font-weight:800;line-height:1;color:var(--ink)}
+  .b-date .m{font-size:8px;font-weight:800;letter-spacing:.7px;color:var(--pink-deep);margin-top:3px}
+  .b-main{flex:1;min-width:0}
+  .b-kind{font-size:8.5px;font-weight:800;letter-spacing:.7px;color:var(--pink-deep)}
+  .b-title{font-size:13px;font-weight:800;margin-top:2px}
+  .b-meta{font-size:9.5px;color:var(--ink2);margin-top:4px;line-height:1.4}
+  .b-time{font-size:10px;color:var(--ink2);font-weight:700;margin-top:5px}
+  .b-actions{margin-top:10px;display:flex;justify-content:flex-end}
+  .cancel{border:1px solid rgba(216,66,79,.55);border-radius:10px;color:var(--red);font-size:9.5px;font-weight:800;padding:7px 11px;background:#fff}
+  .contact{background:#fbf4f8;border-radius:10px;color:var(--pink-deep);font-size:9.5px;font-weight:800;line-height:1.4;padding:8px 9px;text-align:right;max-width:245px}
+  .schedule-card{background:#fff;border-radius:17px;padding:13px 12px 11px;border:1px solid #eee6ef;margin-top:9px}
+  .sc-top{display:flex;gap:10px;align-items:flex-start}
+  .time{width:42px;flex:0 0 42px}
+  .time .t{font-size:13px;font-weight:800;font-feature-settings:'tnum'}
+  .time .dur{font-size:8.5px;color:var(--muted);margin-top:2px}
+  .rail{width:3px;align-self:stretch;background:var(--pink);border-radius:3px;margin-top:2px}
+  .sc-main{flex:1;min-width:0}
+  .sc-title{font-size:12.5px;font-weight:800;line-height:1.3}
+  .sticker{display:inline-block;background:var(--pink-soft);color:var(--pink-deep);border-radius:6px;padding:3px 5px;font-size:8px;font-weight:800;letter-spacing:.5px;margin-left:5px;vertical-align:2px}
+  .sc-hall{font-size:9.5px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:4px}
+  .sc-bottom{display:flex;align-items:flex-end;justify-content:space-between;margin-top:7px}
+  .bonus{font-size:9.5px;font-weight:800;color:var(--gold);white-space:nowrap}
+  .bonus .star{font-size:10px}
+  .callout{margin-top:9px;border-left:3px solid var(--pink);background:#fbf4f8;border-radius:0 9px 9px 0;padding:8px 9px;color:var(--ink2);font-size:10px;line-height:1.45}
+  .callout b{color:var(--ink)}
+  .arrow{align-self:center;width:31px;height:31px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink2);font-size:15px;flex:0 0 31px}
+  .aside{width:230px;flex:0 0 230px;background:rgba(255,255,255,.52);border:1px solid var(--line);border-radius:17px;padding:13px}
+  .aside h3{margin:0 0 6px;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--pink)}
+  .aside p{margin:0 0 8px;font-size:10px;line-height:1.5;color:var(--ink2)}
+  .aside ul{margin:0;padding-left:14px;color:var(--ink2);font-size:10px;line-height:1.5}
+  .aside li{margin-bottom:4px}
+  .bonus-phone{width:390px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:27px;padding:10px 9px 0;overflow:hidden}
+  .bonus-head{padding:6px 8px 2px}
+  .bonus-title{font-size:22px;font-weight:800;letter-spacing:-.3px}
+  .bonus-sub{font-size:10px;color:var(--muted);margin-top:3px}
+  .total{margin:10px 7px 0;border-radius:17px;background:linear-gradient(135deg,#2b2131 0%,#4b2d43 55%,#7b3f5d 100%);color:#fff;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 7px 16px rgba(43,33,49,.2)}
+  .total .label{font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:800;color:#f4dbe7}
+  .total .value{font-size:29px;font-weight:800;line-height:1;margin-top:3px}
+  .total .unit{font-size:10px;opacity:.8;margin-top:3px}
+  .total .orb{width:43px;height:43px;border-radius:14px;background:rgba(255,255,255,.13);display:grid;place-items:center;font-size:22px;color:#f5c451}
+  .month{padding:13px 8px 3px;font-size:9px;font-weight:800;letter-spacing:1.1px;color:var(--muted);text-transform:uppercase}
+  .bonus-list{margin:0 7px;background:#fff;border:1px solid #eee6ef;border-radius:15px;overflow:hidden}
+  .bonus-row{display:flex;gap:10px;align-items:flex-start;padding:10px 11px;border-bottom:1px solid #f3edf4}
+  .bonus-row:last-child{border-bottom:none}
+  .bonus-date{width:41px;flex:0 0 41px;font-size:9px;color:var(--muted);font-weight:700;padding-top:1px}
+  .bonus-info{flex:1;min-width:0}
+  .bonus-desc{font-size:10.5px;font-weight:800;line-height:1.3}
+  .bonus-note{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.3}
+  .amount{font-size:10.5px;font-weight:800;white-space:nowrap;padding-top:1px}
+  .amount.plus{color:var(--green)}
+  .amount.minus{color:var(--red)}
+  .nav{margin-top:12px;display:flex;align-items:center;justify-content:space-around;border-top:1px solid var(--line);padding:8px 3px 10px;background:var(--bg)}
+  .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:7.5px;color:var(--muted);font-weight:700}
+  .nav-item .ico{font-size:13px;line-height:1}
+  .nav-item.active{color:var(--pink-deep)}
+  .nav-item.active .ico{color:var(--pink-deep)}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;color:var(--ink2);font-size:9.5px}
+  .legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
+  .footer{margin-top:22px;padding-top:12px;border-top:1px solid #dcd3e0;display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
+  .footer b{color:var(--ink2)}
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="top">
+    <div>
+      <div class="eyebrow">D'arky · Эскиз перед правкой</div>
+      <h1>Отмена аренды, бонусы в расписании и новая вкладка «Баллы»</h1>
+      <p class="sub">Три связанные правки. Сейчас код не меняется — ниже предлагаемый вид, данные и расположение элементов.</p>
+    </div>
+    <div class="badge">Эскиз · 20.11.2026</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="num">1</div><div class="sec-title">«Записи»: отмена своей аренды</div><div class="hint">только <b>type 2</b>, только своя аренда</div></div>
+    <div class="row">
+      <div class="panel">
+        <div class="panel-label"><span class="tag tag-now">Сейчас</span><span style="font-size:9px;color:var(--muted)">красная кнопка</span></div>
+        <div class="phone">
+          <div class="screen-title">Записи</div>
+          <div class="screen-sub">1 запись</div>
+          <div class="booking">
+            <div class="b-top">
+              <div class="b-date"><div class="d">23</div><div class="m">НОЯ</div></div>
+              <div class="b-main">
+                <div class="b-kind">АРЕНДА ЗАЛА</div>
+                <div class="b-title">Средний зал</div>
+                <div class="b-meta">D'arky Dance · Главный</div>
+                <div class="b-time">19:00–20:00 · понедельник</div>
+              </div>
+            </div>
+            <div class="b-actions"><span class="cancel">Отменить запись</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="panel">
+        <div class="panel-label"><span class="tag tag-new">Предлагаю</span><span style="font-size:9px;color:var(--muted)">без кнопки</span></div>
+        <div class="phone">
+          <div class="screen-title">Записи</div>
+          <div class="screen-sub">1 запись</div>
+          <div class="booking">
+            <div class="b-top">
+              <div class="b-date"><div class="d">23</div><div class="m">НОЯ</div></div>
+              <div class="b-main">
+                <div class="b-kind">АРЕНДА ЗАЛА</div>
+                <div class="b-title">Средний зал</div>
+                <div class="b-meta">D'arky Dance · Главный</div>
+                <div class="b-time">19:00–20:00 · понедельник</div>
+              </div>
+            </div>
+            <div class="b-actions"><span class="contact">Для отмены свяжитесь<br>с администратором</span></div>
+          </div>
+          <div class="callout"><b>Логика:</b> у своей аренды (type 2) вместо кнопки отмены — только подпись. У групповых, индивидуальных и чужих записей поведение не меняется.</div>
+        </div>
+      </div>
+      <div class="aside">
+        <h3>Правило</h3>
+        <p><b>Своя аренда:</b> отмена через администратора.</p>
+        <p><b>Остальные записи:</b> кнопка «Отменить запись» остаётся, если доступна сейчас.</p>
+        <p>Подпись — в правом нижнем углу карточки, без кнопки и без красной рамки.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="num">2</div><div class="sec-title">Расписание: бонусы арендатора</div><div class="hint">в правом нижнем углу карточки аренды</div></div>
+    <div class="row">
+      <div class="panel" style="flex:0 0 390px">
+        <div class="panel-label"><span class="tag tag-new">Предлагаю</span><span style="font-size:9px;color:var(--muted)">снизу справа</span></div>
+        <div class="phone" style="width:350px">
+          <div class="screen-title">Расписание</div>
+          <div class="screen-sub">Сегодня, 19 ноября</div>
+          <div class="schedule-card">
+            <div class="sc-top">
+              <div class="time"><div class="t">19:00</div><div class="dur">60 мин</div></div>
+              <div class="rail"></div>
+              <div class="sc-main">
+                <div class="sc-title">Алексей Никифоров <span class="sticker">АРЕНДА</span></div>
+                <div class="sc-hall">◉ Средний зал</div>
+                <div class="sc-bottom"><span></span><span class="bonus"><span class="star">★</span> 450 бонусов</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="callout"><b>Данные:</b> <code>client.bonus</code> из записи type 2. Показываем и для своей, и для чужой аренды; если 0 — «★ 0 бонусов».</div>
+        </div>
+      </div>
+      <div class="aside" style="width:250px;flex:0 0 250px">
+        <h3>Компоновка</h3>
+        <p>Зал остаётся последней строкой. Бонусы — на той же нижней строке справа, не выше зала.</p>
+        <p><b>Формат:</b> <span style="color:var(--gold);font-weight:800">★ 450 бонусов</span></p>
+        <ul>
+          <li>звёздочка — акцентный цвет;</li>
+          <li>число — без разделителей или с пробелом для 1 000+;</li>
+          <li>не мешает тэгу «АРЕНДА» справа сверху.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="num">3</div><div class="sec-title">Новая вкладка «Баллы»</div><div class="hint">после «Покупок», перед «Записями»</div></div>
+    <div class="row">
+      <div class="panel" style="flex:0 0 430px">
+        <div class="panel-label"><span class="tag tag-new">Предлагаю</span><span style="font-size:9px;color:var(--muted)">5 вкладок</span></div>
+        <div class="bonus-phone">
+          <div class="bonus-head">
+            <div class="bonus-title">Баллы</div>
+            <div class="bonus-sub">История начислений и списаний</div>
+          </div>
+          <div class="total">
+            <div><div class="label">Всего баллов</div><div class="value">900</div><div class="unit">на текущий момент</div></div>
+            <div class="orb">★</div>
+          </div>
+
+          <div class="month">Ноябрь 2026</div>
+          <div class="bonus-list">
+            <div class="bonus-row">
+              <div class="bonus-date">14.11</div>
+              <div class="bonus-info"><div class="bonus-desc">Начисление за покупку абонемента</div><div class="bonus-note">Абонемент № 153 · +450</div></div>
+              <div class="amount plus">+450</div>
+            </div>
+            <div class="bonus-row">
+              <div class="bonus-date">03.11</div>
+              <div class="bonus-info"><div class="bonus-desc">Оплата аренды зала</div><div class="bonus-note">Списание бонусов</div></div>
+              <div class="amount minus">−100</div>
+            </div>
+          </div>
+
+          <div class="month">Октябрь 2026</div>
+          <div class="bonus-list">
+            <div class="bonus-row">
+              <div class="bonus-date">28.10</div>
+              <div class="bonus-info"><div class="bonus-desc">Начисление за визит</div><div class="bonus-note">Групповое занятие</div></div>
+              <div class="amount plus">+50</div>
+            </div>
+            <div class="bonus-row">
+              <div class="bonus-date">15.10</div>
+              <div class="bonus-info"><div class="bonus-desc">Обнуление баллов</div><div class="bonus-note">Истёк срок действия</div></div>
+              <div class="amount minus">−900</div>
+            </div>
+          </div>
+
+          <div class="nav">
+            <div class="nav-item"><span class="ico">▤</span><span>Абонемент</span></div>
+            <div class="nav-item"><span class="ico">◷</span><span>Посещения</span></div>
+            <div class="nav-item"><span class="ico">▦</span><span>Покупки</span></div>
+            <div class="nav-item active"><span class="ico">★</span><span>Баллы</span></div>
+            <div class="nav-item"><span class="ico">▣</span><span>Записи</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="aside" style="width:260px;flex:0 0 260px">
+        <h3>Данные и порядок</h3>
+        <p><b>Всего баллов:</b> текущий баланс клиента.</p>
+        <p><b>История:</b> <code>widget_client_lk/bonuses</code>; сортируем по дате <b>desc</b>, группируем по месяцам, как «Покупки».</p>
+        <p>В строке: дата, описание, сумма со знаком. Начисления — зелёные, списания — красные.</p>
+        <ul>
+          <li>месяц — заголовком капсом;</li>
+          <li>дата — день и месяц;</li>
+          <li>описание — из `descriptionTypeText` / `typeText`;</li>
+          <li>пустая история — «Пока нет баллов».</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span><b>Эскиз, не финальная реализация.</b> После согласования — код, тесты и release.</span><span>D'arky · 20.11.2026</span></div>
+</div>
+</body>
+</html>

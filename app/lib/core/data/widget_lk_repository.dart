@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import '../config/app_config.dart';
 import '../models/account.dart';
+import '../models/bonus.dart';
 import '../models/booking.dart';
 import '../models/deposit.dart';
 import '../models/paged.dart';
@@ -297,12 +298,28 @@ class WidgetLkRepository {
   }
 
 
-  Future<Paged<Deposit>> deposits(
+  Future<Paged<Bonus>> bonuses(
     Session session,
     int page, {
     int pageSize = 20,
   }) async {
     final json = await api.post(
+      '${config.apiBasePath}/widget_client_lk/bonuses',
+      {
+        'limit': pageSize,
+        'page': page,
+        'sort': {'created': 'desc'},
+        'filters': _auth(session),
+      },
+    );
+    return _paged(json, page, Bonus.fromJson);
+  }
+
+  Future<Paged<Deposit>> deposits(
+    Session session,
+    int page, {
+    int pageSize = 20,
+  }) async {    final json = await api.post(
       '${config.apiBasePath}/widget_client_lk/deposits',
       {
         'limit': pageSize,

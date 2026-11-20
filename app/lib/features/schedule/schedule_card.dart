@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../core/models/schedule_item.dart';
 import '../../core/time/branch_clock.dart';
+import '../../core/ui/plural.dart';
 import '../../core/ui/theme.dart';
 import 'schedule_format.dart';
 
@@ -102,6 +103,7 @@ class ScheduleCard extends StatelessWidget {
         rail: rail,
         title: _rentTitle(item),
         hall: item.hallName,
+        bonusText: '★ ${formatPoints(item.clientBonus ?? 0)}',
         stickerName: item.stickerName,
         stickerColor: item.stickerColor,
         trailingIcon: Icons.meeting_room_outlined,
@@ -170,6 +172,7 @@ class ScheduleCard extends StatelessWidget {
     List<String> mainTeachers = const [],
     List<String> substituteTeachers = const [],
     String? hall,
+    String? bonusText,
     String? changeText,
     String? stickerName,
     String? stickerColor,
@@ -185,6 +188,7 @@ class ScheduleCard extends StatelessWidget {
       substituteTeachers.where((name) => name.trim().isNotEmpty).join(', '),
     );
     final hallText = _nonEmpty(hall);
+    final bonus = _nonEmpty(bonusText);
     final change = _nonEmpty(changeText);
     final substitution = substituteText == null
         ? change
@@ -293,17 +297,37 @@ class ScheduleCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                  if (hallText != null) ...[
+                  if (hallText != null || bonus != null) ...[
                     const SizedBox(height: 5),
-                    _IconLine(
-                      icon: Icons.place_outlined,
-                      color: palette.muted,
-                      child: Text(
-                        hallText,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: text.bodySmall,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (hallText != null)
+                          Expanded(
+                            child: _IconLine(
+                              icon: Icons.place_outlined,
+                              color: palette.muted,
+                              child: Text(
+                                hallText,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: text.bodySmall,
+                              ),
+                            ),
+                          ),
+                        if (bonus != null) ...[
+                          if (hallText != null) const SizedBox(width: 8),
+                          Text(
+                            bonus,
+                            style: text.bodySmall?.copyWith(
+                              color: palette.brightness == Brightness.dark
+                                  ? const Color(0xFFE8BF3F)
+                                  : const Color(0xFFA87815),
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ],
                 ],

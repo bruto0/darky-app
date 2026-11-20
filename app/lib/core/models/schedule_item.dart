@@ -10,6 +10,7 @@ class ScheduleItem {
     this.clientId,
     this.clientName,
     this.clientDisplayName,
+    this.clientBonus,
     this.startsAt,
     this.endsAt,
     this.isMine = false,
@@ -78,6 +79,7 @@ class ScheduleItem {
       clientName: (json['clientName'] ?? _personName(client))?.toString(),
       clientDisplayName:
           (json['clientDisplayName'] ?? _personShortName(client))?.toString(),
+      clientBonus: _int(client['bonus']),
       startsAt: _date(json['startsAt'] ?? json['date']),
       endsAt: _date(json['endsAt']),
       isMine: json['isMine'] == true,
@@ -109,6 +111,7 @@ class ScheduleItem {
   final int? clientId;
   final String? clientName;
   final String? clientDisplayName;
+  final int? clientBonus;
   final DateTime? startsAt;
   final DateTime? endsAt;
   final bool isMine;
@@ -140,6 +143,7 @@ class ScheduleItem {
     List<String>? substituteTeacherNames,
     String? clientName,
     String? clientDisplayName,
+    int? clientBonus,
     String? styleName,
     bool? isMine,
     bool clearClientName = false,
@@ -167,6 +171,7 @@ class ScheduleItem {
       clientDisplayName: clearClientName
           ? null
           : (clientDisplayName ?? this.clientDisplayName),
+      clientBonus: clearClientName ? null : (clientBonus ?? this.clientBonus),
       startsAt: startsAt,
       endsAt: endsAt,
       isMine: isMine ?? this.isMine,

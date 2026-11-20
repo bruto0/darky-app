@@ -39,6 +39,16 @@ void main() {
     minutesEnd: 20 * 60,
   );
 
+  final lessonBooking = Booking(
+    id: '4002',
+    type: 0,
+    title: 'Бачата Beginner',
+    hallName: 'Большой зал',
+    startsAt: DateTime.parse('2026-11-24T19:00:00+07:00'),
+    minutesBegin: 19 * 60,
+    minutesEnd: 20 * 60,
+  );
+
   Future<void> pumpScreen(
     WidgetTester tester, {
     required List<Booking> Function() load,
@@ -81,7 +91,11 @@ void main() {
     expect(find.text("D'arky Dance · Главный"), findsOneWidget);
     expect(find.text('19:00–20:00'), findsOneWidget);
     expect(find.text('· понедельник'), findsOneWidget);
-    expect(find.text('Отменить запись'), findsOneWidget);
+    expect(find.text('Отменить запись'), findsNothing);
+    expect(
+      find.text('Для отмены свяжитесь с администратором'),
+      findsOneWidget,
+    );
     expect(find.textContaining('не позднее чем за 30 минут'), findsOneWidget);
     expect(find.text('Хотите записаться?'), findsNothing);
 
@@ -130,7 +144,7 @@ void main() {
 
     await pumpScreen(
       tester,
-      load: () => [rentBooking],
+      load: () => [lessonBooking],
       launchExternalUrl: launcher,
     );
 
@@ -159,7 +173,7 @@ void main() {
   ) async {
     await pumpScreen(
       tester,
-      load: () => [rentBooking],
+      load: () => [lessonBooking],
       launchExternalUrl: (uri) async => false,
     );
 
@@ -264,7 +278,11 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('2 записи'), findsOneWidget);
-    expect(find.text('Отменить запись'), findsNWidgets(2));
+    expect(find.text('Отменить запись'), findsOneWidget);
+    expect(
+      find.text('Для отмены свяжитесь с администратором'),
+      findsOneWidget,
+    );
     expect(find.text('Хотите записаться?'), findsNothing);
   });
 }

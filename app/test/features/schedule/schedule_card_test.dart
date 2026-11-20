@@ -223,6 +223,7 @@ void main() {
 
     expect(find.text('аренда Анна Смирнова'), findsOneWidget);
     expect(find.text('Большой зал'), findsOneWidget);
+    expect(find.text('★ 0 баллов'), findsOneWidget);
     expect(find.text('15:00'), findsOneWidget);
     expect(
       tester.getTopLeft(find.text('Большой зал')).dy,
@@ -252,6 +253,29 @@ void main() {
     expect(
       tester.getTopLeft(find.text('Большой зал')).dy,
       greaterThan(tester.getTopLeft(find.text('аренда Пётр Петров')).dy),
+    );
+  });
+
+  testWidgets('rent card shows the tenant bonus with plural forms',
+      (tester) async {
+    final item = scheduleItem(
+      id: 'r-bonus',
+      type: 2,
+      clientName: 'Алексей Никифоров',
+      clientBonus: 1,
+      hallName: 'Средний зал',
+      minutesBegin: 900,
+      minutesEnd: 960,
+    );
+
+    await tester.pumpWidget(testApp(ScheduleCard(item: item, clock: fixedClock())));
+
+    expect(find.text('★ 1 балл'), findsOneWidget);
+    expect(
+      (tester.getTopLeft(find.text('Средний зал')).dy -
+              tester.getTopLeft(find.text('★ 1 балл')).dy)
+          .abs(),
+      lessThan(2),
     );
   });
 

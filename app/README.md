@@ -3,7 +3,7 @@
 Клиент D'arky Dance для Android 15+. Foundation + Auth + MVP-разделы:
 темы, каркас, сетевой профиль L2, **нативный вход** (D15),
 хендофф `client_id`/`secret`, сессия в Keystore, абонементы, расписание,
-посещения, покупки и записи. Проверено на AVD API 37 с живым API.
+посещения, покупки, баллы и записи. Проверено на AVD API 37 с живым API.
 
 Исторические Foundation-скриншоты (до MVP-разделов):
 
@@ -34,7 +34,7 @@ flutter run -d emulator-5554
 
 ```powershell
 flutter analyze
-flutter test      # 188 tests
+flutter test      # 195 tests
 flutter build apk --debug
 ```
 
@@ -45,7 +45,7 @@ APK: `app/build/app/outputs/flutter-apk/app-debug.apk`.
 
 - **2 темы** — Светлая и Тёмная «Графит»;
   `ThemeController` + `shared_preferences`; переключение сохраняется.
-- **4 таба** — Абонемент, Посещения, Покупки, Записи; реальные экраны, не заглушки.
+- **5 табов** — Абонемент, Посещения, Покупки, Баллы, Записи; реальные экраны, не заглушки.
 - **Абонемент/профиль** — `widget_client_lk/accounts`, карточки «Профи»/«Стандарт»,
   счётчики пакетов, срок, per-account заморозка, выход, меню `⋮`,
   диалог четырёх тем. Расписание встроено в тот же `CustomScrollView`.

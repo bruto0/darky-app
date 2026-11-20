@@ -1,6 +1,6 @@
 # D'arky — мобильное приложение клиента D'arky Dance
 
-**Статус:** Foundation, Auth и MVP-разделы готовы: профиль/абонементы, расписание, посещения, покупки, записи. Вход нативный (D15), восстановление — в браузере (D16). Проверено на **AVD API 37** с живым API (тестовый клиент): 4 таба, два абонемента, заморозка «Профи», 20 занятий дня, 90 посещений, 9 операций, 1 запись. 188 тестов, release APK 1.0.7.
+**Статус:** Foundation, Auth и MVP-разделы готовы: профиль/абонементы, расписание, посещения, покупки, баллы, записи. Вход нативный (D15), восстановление — в браузере (D16). Проверено на **AVD API 37** с живым API (тестовый клиент): 5 табов, два абонемента, заморозка «Профи», 20 занятий дня, 90 посещений, 9 операций, 1 запись. 195 тестов, release APK 1.0.8.
 
 | Что | Где |
 |---|---|
@@ -28,7 +28,7 @@
 - **Flutter**, Android 15+ (minSdk 35), архитектура готова к iOS.
 - **Нативный вход** (D15): телефон и пароль в Flutter-полях, `AutofillGroup`, запросы `phone_info` → `check_password` → `search`; после входа приложение забирает `client_id` и `secret`. Пароль не хранится и не логируется.
 - **Восстановление пароля** (D16): ссылка открывает `/widget/2` во внешнем браузере; восстановление — модалка вендора (Telegram / MAX / звонок).
-- **4 раздела:** Абонемент (профиль + абонементы + расписание), Посещения, Покупки, Записи.
+- **5 разделов:** Абонемент (профиль + абонементы + расписание), Посещения, Покупки, Баллы, Записи.
 - **Профиль и абонементы:** два реальных абонемента, счётчики пакетов, выход, меню `⋮` справа от выхода. QR-кнопка с главной убрана. «Заморозить» — full width только у «Профи» (21/21 день), у «Стандарт» — пояснение; «Оплатить» отсутствует.
 - **2 темы** — Светлая и Тёмная; выбор в диалоге из меню `⋮` справа от выхода. Фон расписания следует теме.
 - **Расписание без вложенного скролла:** весь день выкладывается в общий скролл экрана.
@@ -45,11 +45,11 @@
 . .\tools\env.ps1
 cd app
 flutter analyze   # 0 issues
-flutter test      # 188 тестов
+flutter test      # 195 тестов
 flutter build apk --debug
 ```
 
-Готово: 2 темы с сохранением, 4 таба, `ApiClient` с L2-профилем и Brotli/Zstd, `ChromeVersionProvider` + `<queries>`, `SessionStore`, `BranchClock`, `JsonCache`, логирование с redaction, контракты/fakes, фикстуры, иконка/adaptive/splash. Auth: нативные поля, `phone_info`/`check_password`, `widget_client_lk/search`, сессия в Keystore. Данные: `widget_client_lk/accounts`, `widget_schedule/list` + stickers/changes, `visits`, `deposits`, `widget_client_lk/schedule`, `barcode`; UI-разделы и тесты расписания/истории/записей/аккаунта. Проверено на AVD API 37 с живым API.
+Готово: 2 темы с сохранением, 5 табов, `ApiClient` с L2-профилем и Brotli/Zstd, `ChromeVersionProvider` + `<queries>`, `SessionStore`, `BranchClock`, `JsonCache`, логирование с redaction, контракты/fakes, фикстуры, иконка/adaptive/splash. Auth: нативные поля, `phone_info`/`check_password`, `widget_client_lk/search`, сессия в Keystore. Данные: `widget_client_lk/accounts`, `widget_schedule/list` + stickers/changes, `visits`, `deposits`, `widget_client_lk/bonuses`, `widget_client_lk/schedule`, `barcode`; UI-разделы и тесты расписания/истории/записей/аккаунта. Проверено на AVD API 37 с живым API.
 
 `compileSdk 36` (требование `flutter_secure_storage`/`shared_preferences_android`), `minSdk/targetSdk 35`; WebView из auth удалён. Все ограничения и варианты кастомизации WebView — в [design/WEBVIEW-NOTES.md](design/WEBVIEW-NOTES.md).
 

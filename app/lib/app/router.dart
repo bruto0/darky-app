@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/auth/auth_screen.dart';
+import '../features/bonuses/bonuses_screen.dart';
 import '../features/bookings/bookings_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/purchases/purchases_screen.dart';
@@ -47,6 +48,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                 GoRoute(
                   path: '/purchases',
                   builder: (context, state) => const PurchasesScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/bonuses',
+                  builder: (context, state) => const BonusesScreen(),
                 ),
               ],
             ),

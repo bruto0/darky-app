@@ -122,27 +122,40 @@ class BookingCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          OutlinedButton(
-            onPressed: () {
-              showBookingCancellationSheet(
-                context,
-                booking: booking,
-                clock: clock,
-                cabinetUri: cabinetUri,
-                launchExternalUrl: launchExternalUrl,
-              );
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: palette.red,
-              side: BorderSide(color: palette.red.withValues(alpha: 0.5)),
-              minimumSize: const Size(44, 46),
-              textStyle: text.labelLarge?.copyWith(
-                color: palette.red,
-                fontWeight: FontWeight.w700,
+          if (booking.isRent)
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Для отмены свяжитесь с администратором',
+                textAlign: TextAlign.right,
+                style: text.bodySmall?.copyWith(
+                  color: palette.ink2,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
+            )
+          else
+            OutlinedButton(
+              onPressed: () {
+                showBookingCancellationSheet(
+                  context,
+                  booking: booking,
+                  clock: clock,
+                  cabinetUri: cabinetUri,
+                  launchExternalUrl: launchExternalUrl,
+                );
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: palette.red,
+                side: BorderSide(color: palette.red.withValues(alpha: 0.5)),
+                minimumSize: const Size(44, 46),
+                textStyle: text.labelLarge?.copyWith(
+                  color: palette.red,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              child: const Text('Отменить запись'),
             ),
-            child: const Text('Отменить запись'),
-          ),
         ],
       ),
     );

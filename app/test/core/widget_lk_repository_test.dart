@@ -150,6 +150,29 @@ void main() {
             },
           ],
         };
+      } else if (path.endsWith('/bonuses')) {
+        payload = {
+          'total': 2,
+          'items': [
+            {
+              'id': 20,
+              'type': 1,
+              'typeText': 'начисление баллов',
+              'sum': 450,
+              'sumWithSign': 450,
+              'created': 1795046400,
+              'descriptionTypeText': 'за покупку абонемента',
+            },
+            {
+              'id': 49,
+              'type': 3,
+              'typeText': 'обнуление баллов',
+              'sum': 900,
+              'sumWithSign': -900,
+              'created': 1794787200,
+            },
+          ],
+        };
       } else if (path.endsWith('/deposits')) {
         payload = {
           'total': 18,
@@ -248,6 +271,17 @@ void main() {
     expect(lastVisitsBody['sort'], {'visit_date': 'desc', 'created': 'desc'});
     expect(lastVisitsBody['page'], 2);
     expect(lastVisitsBody['filters']['client_id'], 255);
+  });
+
+  test('loads bonus history with client auth', () async {
+    final page = await repository.bonuses(session, 1);
+
+    expect(page.total, 2);
+    expect(page.items.first.signedAmount, 450);
+    expect(page.items.last.signedAmount, -900);
+    expect(page.items.first.description, 'за покупку абонемента');
+    expect(lastBody['filters']['client_id'], 255);
+    expect(lastBody['sort'], {'created': 'desc'});
   });
 
   test('loads deposits with type filter', () async {

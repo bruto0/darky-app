@@ -39,10 +39,12 @@ void main() {
         'name': 'Пётр',
         'lastName': 'Петров',
         'middleName': 'Сергеевич',
+        'bonus': 450,
       },
     });
 
     expect(item.clientDisplayName, 'Пётр Петров');
+    expect(item.clientBonus, 450);
     expect(item.isRent, isTrue);
   });
 }

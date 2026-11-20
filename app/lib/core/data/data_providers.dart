@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/providers.dart';
 import '../models/account.dart';
+import '../models/bonus.dart';
 import '../models/booking.dart';
 import '../models/deposit.dart';
 import '../models/paged.dart';
@@ -48,6 +49,11 @@ final visitsPageProvider =
 final depositsPageProvider =
     FutureProvider.autoDispose.family<Paged<Deposit>, int>((ref, page) {
   return ref.watch(widgetLkRepositoryProvider).deposits(_session(ref), page);
+});
+
+final bonusesPageProvider =
+    FutureProvider.autoDispose.family<Paged<Bonus>, int>((ref, page) {
+  return ref.watch(widgetLkRepositoryProvider).bonuses(_session(ref), page);
 });
 
 final bookingsProvider =
