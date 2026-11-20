@@ -9,6 +9,7 @@ class ScheduleItem {
     this.substituteTeacherNames = const [],
     this.clientId,
     this.clientName,
+    this.clientDisplayName,
     this.startsAt,
     this.endsAt,
     this.isMine = false,
@@ -75,6 +76,8 @@ class ScheduleItem {
       mainTeacherNames: mainTeacherNames,
       clientId: _int(json['clientId']) ?? _int(client['id']),
       clientName: (json['clientName'] ?? _personName(client))?.toString(),
+      clientDisplayName:
+          (json['clientDisplayName'] ?? _personShortName(client))?.toString(),
       startsAt: _date(json['startsAt'] ?? json['date']),
       endsAt: _date(json['endsAt']),
       isMine: json['isMine'] == true,
@@ -105,6 +108,7 @@ class ScheduleItem {
   final List<String> substituteTeacherNames;
   final int? clientId;
   final String? clientName;
+  final String? clientDisplayName;
   final DateTime? startsAt;
   final DateTime? endsAt;
   final bool isMine;
@@ -135,6 +139,7 @@ class ScheduleItem {
     List<String>? mainTeacherNames,
     List<String>? substituteTeacherNames,
     String? clientName,
+    String? clientDisplayName,
     String? styleName,
     bool? isMine,
     bool clearClientName = false,
@@ -159,6 +164,9 @@ class ScheduleItem {
           : (substituteTeacherNames ?? this.substituteTeacherNames),
       clientId: clientId,
       clientName: clearClientName ? null : (clientName ?? this.clientName),
+      clientDisplayName: clearClientName
+          ? null
+          : (clientDisplayName ?? this.clientDisplayName),
       startsAt: startsAt,
       endsAt: endsAt,
       isMine: isMine ?? this.isMine,
@@ -191,6 +199,9 @@ class ScheduleItem {
     );
   }
 
+  bool get isSampoSticker =>
+      stickerName?.trim().toLowerCase() == 'сампо';
+
   static int? _int(Object? value) {
     if (value is int) return value;
     if (value is num) return value.toInt();
@@ -206,6 +217,13 @@ class ScheduleItem {
       if (!names.contains(name)) names.add(name);
     }
     return names;
+  }
+
+  static String? _personShortName(Map person) {
+    final first = (person['name'] ?? '').toString().trim();
+    final last = (person['lastName'] ?? '').toString().trim();
+    final parts = [first, last].where((part) => part.isNotEmpty).toList();
+    return parts.isEmpty ? null : parts.join(' ');
   }
 
   static String? _teacherShortName(Map teacher) {

@@ -40,20 +40,30 @@ class Visit {
     ];
     final targetName = style['name']?.toString();
     final level = target['level']?.toString();
+    final targetEntity = target['entity']?.toString();
+    final individualTeacher = targetEntity == 'teacher'
+        ? _shortName(target)
+        : null;
+    final teacherNames = individualTeacher != null
+        ? <String>[individualTeacher]
+        : _teacherList(teachers.isNotEmpty ? teachers : targetTeachers);
+    final rawTitle = targetEntity == 'teacher'
+        ? (json['name'] ?? json['title'])
+        : (json['name'] ?? json['title'] ?? target['name'] ?? target['title']);
 
     return Visit(
       id: '${json['id'] ?? ''}',
       title: targetName ??
-          (json['name'] ?? json['title'] ?? target['name'] ?? target['title'])
-              ?.toString(),
+          rawTitle?.toString() ??
+          (targetEntity == 'teacher' ? 'Индивидуальное занятие' : null),
       hallName: (json['hallName'] ?? hall['name'])?.toString(),
-      teacherName: (json['teacherName'] as String?) ?? _teacherName(teacher),
+      teacherName: (json['teacherName'] as String?) ??
+          individualTeacher ??
+          _teacherName(teacher),
       visitedAt: _date(json['visit_date'] ?? json['visitDate'] ?? json['visitedAt']),
       status: json['status']?.toString(),
       targetName: (json['targetName'] ?? targetName)?.toString(),
-      teacherNames: _teacherList(
-        teachers.isNotEmpty ? teachers : targetTeachers,
-      ),
+      teacherNames: teacherNames,
       serviceNumber: _int(service['number']) ??
           _int(json['service']) ??
           _int(json['serviceNumber']),
@@ -89,6 +99,13 @@ class Visit {
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value.trim());
     return null;
+  }
+
+  static String? _shortName(Map person) {
+    final first = (person['name'] ?? '').toString().trim();
+    final last = (person['lastName'] ?? '').toString().trim();
+    final parts = [first, last].where((part) => part.isNotEmpty).toList();
+    return parts.isEmpty ? null : parts.join(' ');
   }
 
   static String? _teacherName(Map teacher) {

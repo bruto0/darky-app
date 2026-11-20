@@ -134,11 +134,11 @@ class WidgetLkRepository {
   }
 
   ScheduleItem _sanitizeScheduleItem(ScheduleItem item, Session session) {
-    if ((item.isIndividual || item.isRent) &&
-        item.clientId != session.clientId) {
+    final mine = item.clientId == session.clientId;
+    if (item.isIndividual && !mine) {
       return item.sanitizedForeign().copyWith(isMine: false);
     }
-    return item.copyWith(isMine: item.clientId == session.clientId);
+    return item.copyWith(isMine: mine);
   }
 
   String? _scheduleId(Map<String, dynamic> item) {

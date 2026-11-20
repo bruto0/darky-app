@@ -37,7 +37,7 @@ void main() {
     expect(find.text('14:00'), findsOneWidget);
     expect(find.text('60 мин'), findsOneWidget);
 
-    expect(find.text('Основные: Мария Иванова, Наталья Губина'), findsOneWidget);
+    expect(find.text('Мария Иванова, Наталья Губина'), findsOneWidget);
     final change = tester.widget<Text>(find.text('Замена: Семьянов В. С.'));
     expect(change.style?.color, AppPalette.light.red);
   });
@@ -57,7 +57,7 @@ void main() {
 
     await tester.pumpWidget(testApp(ScheduleCard(item: item, clock: fixedClock())));
 
-    expect(find.text('Основные: Мария Иванова, Наталья Губина'), findsOneWidget);
+    expect(find.text('Мария Иванова, Наталья Губина'), findsOneWidget);
     expect(find.textContaining('Замена'), findsNothing);
   });
 
@@ -162,7 +162,7 @@ void main() {
     expect(isOwnScheduleItem(item, 255), isFalse);
   });
 
-  testWidgets('own rent shows name, "аренда" and hall', (tester) async {
+  testWidgets('own rent shows tenant name, prefix and hall last', (tester) async {
     final item = scheduleItem(
       id: 'r1',
       type: 2,
@@ -175,13 +175,16 @@ void main() {
 
     await tester.pumpWidget(testApp(ScheduleCard(item: item, clock: fixedClock())));
 
-    expect(find.text('Анна Смирнова'), findsOneWidget);
-    expect(find.text('аренда'), findsOneWidget);
+    expect(find.text('аренда Анна Смирнова'), findsOneWidget);
     expect(find.text('Большой зал'), findsOneWidget);
     expect(find.text('15:00'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text('Большой зал')).dy,
+      greaterThan(tester.getTopLeft(find.text('аренда Анна Смирнова')).dy),
+    );
   });
 
-  testWidgets('foreign rent shows only "аренда" and hall', (tester) async {
+  testWidgets('foreign rent shows tenant name without teacher', (tester) async {
     final item = scheduleItem(
       id: 'r2',
       type: 2,
@@ -197,10 +200,39 @@ void main() {
       testApp(ScheduleCard(item: item, clock: fixedClock(), clientId: 255)),
     );
 
-    expect(find.text('аренда'), findsOneWidget);
+    expect(find.text('аренда Пётр Петров'), findsOneWidget);
     expect(find.text('Большой зал'), findsOneWidget);
-    expect(find.textContaining('Пётр'), findsNothing);
     expect(find.textContaining('Секретный'), findsNothing);
+    expect(
+      tester.getTopLeft(find.text('Большой зал')).dy,
+      greaterThan(tester.getTopLeft(find.text('аренда Пётр Петров')).dy),
+    );
+  });
+
+  testWidgets('sampo rent replaces the first word and keeps hall last',
+      (tester) async {
+    final item = scheduleItem(
+      id: 'r3',
+      type: 2,
+      clientId: 999,
+      clientName: 'Пётр Петров',
+      stickerName: 'сАмПо',
+      hallName: 'Большой зал',
+      minutesBegin: 900,
+      minutesEnd: 960,
+    );
+
+    await tester.pumpWidget(
+      testApp(ScheduleCard(item: item, clock: fixedClock(), clientId: 255)),
+    );
+
+    expect(find.text('сампо Пётр Петров'), findsOneWidget);
+    expect(find.text('аренда Пётр Петров'), findsNothing);
+    expect(find.text('САМПО'), findsNothing);
+    expect(
+      tester.getTopLeft(find.text('Большой зал')).dy,
+      greaterThan(tester.getTopLeft(find.text('сампо Пётр Петров')).dy),
+    );
   });
 
   testWidgets('time falls back to startsAt/endsAt in branch time',

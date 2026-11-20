@@ -95,27 +95,16 @@ class ScheduleCard extends StatelessWidget {
         );
       }
     } else if (item.isRent) {
-      if (isOwn) {
-        card = _fullCard(
-          context,
-          palette: palette,
-          rail: rail,
-          title: _ownTitle(item, fallback: 'Аренда'),
-          teacher: item.teacherName,
-          hall: item.hallName,
-          kindLabel: 'аренда',
-          trailingIcon: Icons.meeting_room_outlined,
-        );
-      } else {
-        card = _compactCard(
-          context,
-          palette: palette,
-          rail: palette.pink.withValues(alpha: 0.8),
-          kind: 'аренда',
-          kindColor: palette.pinkDeep,
-          hall: item.hallName,
-        );
-      }
+      card = _fullCard(
+        context,
+        palette: palette,
+        rail: rail,
+        title: _rentTitle(item),
+        hall: item.hallName,
+        stickerName: item.isSampoSticker ? null : item.stickerName,
+        stickerColor: item.stickerColor,
+        trailingIcon: Icons.meeting_room_outlined,
+      );
     } else {
       // Unknown type: stay on the compact, privacy-safe side.
       card = _compactCard(
@@ -153,6 +142,13 @@ class ScheduleCard extends StatelessWidget {
     if (name != null && name.isNotEmpty) return name;
     final title = item.title.trim();
     return title.isEmpty || title == 'Занятие' ? fallback : title;
+  }
+
+  String _rentTitle(ScheduleItem item) {
+    final prefix = item.isSampoSticker ? 'сампо' : 'аренда';
+    final tenant = _nonEmpty(item.clientDisplayName) ??
+        _nonEmpty(item.clientName);
+    return tenant == null ? prefix : '$prefix $tenant';
   }
 
   String? _changeLabel(ScheduleItem item) {
@@ -258,7 +254,7 @@ class ScheduleCard extends StatelessWidget {
                       icon: Icons.people_outline,
                       color: palette.violet,
                       child: Text(
-                        'Основные: $mainTeacherText',
+                        mainTeacherText,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: text.bodySmall?.copyWith(
@@ -284,6 +280,16 @@ class ScheduleCard extends StatelessWidget {
                       ),
                     ),
                   ],
+                  if (substitution != null) ...[
+                    const SizedBox(height: 5),
+                    Text(
+                      substitution,
+                      style: text.bodySmall?.copyWith(
+                        color: palette.red,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                   if (hallText != null) ...[
                     const SizedBox(height: 5),
                     _IconLine(
@@ -294,16 +300,6 @@ class ScheduleCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: text.bodySmall,
-                      ),
-                    ),
-                  ],
-                  if (substitution != null) ...[
-                    const SizedBox(height: 5),
-                    Text(
-                      substitution,
-                      style: text.bodySmall?.copyWith(
-                        color: palette.red,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],

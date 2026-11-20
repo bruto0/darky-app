@@ -29,4 +29,20 @@ void main() {
     expect(item.mainTeacherNames, ['Диего Кальдерон', 'Наталья Губина']);
     expect(item.teacherName, 'Диего Кальдерон');
   });
+
+  test('rent tenant is parsed as name + lastName', () {
+    final item = ScheduleItem.fromJson({
+      'id': 10,
+      'type': 2,
+      'client': {
+        'id': 999,
+        'name': 'Пётр',
+        'lastName': 'Петров',
+        'middleName': 'Сергеевич',
+      },
+    });
+
+    expect(item.clientDisplayName, 'Пётр Петров');
+    expect(item.isRent, isTrue);
+  });
 }
