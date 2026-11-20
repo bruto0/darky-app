@@ -39,6 +39,7 @@ flutter build apk --debug
 ```
 
 APK: `app/build/app/outputs/flutter-apk/app-debug.apk`.
+Релиз: `flutter build apk --release`; подпись и ключ — [RELEASE.md](../RELEASE.md).
 
 ## Что уже есть
 
