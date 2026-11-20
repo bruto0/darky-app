@@ -58,6 +58,7 @@ void main() {
 
     expect(find.text('Баллы'), findsOneWidget);
     expect(find.text('ВСЕГО БАЛЛОВ'), findsOneWidget);
+    expect(find.text('0 баллов'), findsNothing);
     expect(find.text('НОЯБРЬ 2026'), findsOneWidget);
     expect(find.text('ОКТЯБРЬ 2026'), findsOneWidget);
     expect(

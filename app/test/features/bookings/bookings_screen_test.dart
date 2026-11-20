@@ -97,6 +97,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.textContaining('не позднее чем за 30 минут'), findsOneWidget);
+    expect(find.textContaining('Запись на групповые'), findsNothing);
     expect(find.text('Хотите записаться?'), findsNothing);
 
     expect(find.text('Малый зал'), findsNothing);

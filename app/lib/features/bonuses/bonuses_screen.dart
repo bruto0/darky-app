@@ -6,7 +6,6 @@ import '../../core/data/data_providers.dart';
 import '../../core/models/bonus.dart';
 import '../../core/models/paged.dart';
 import '../../core/time/branch_clock.dart';
-import '../../core/ui/plural.dart';
 import '../../core/ui/theme.dart';
 import 'bonus_history_utils.dart';
 
@@ -273,13 +272,6 @@ class _TotalBonusCard extends StatelessWidget {
                   style: text.headlineMedium?.copyWith(
                     color: palette.bg,
                     fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  formatPoints(value),
-                  style: text.bodySmall?.copyWith(
-                    color: palette.bg.withValues(alpha: 0.78),
                   ),
                 ),
               ],

@@ -133,8 +133,7 @@ class _CancellationRule extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Text(
-        'Отмена доступна не позднее чем за 30 минут до начала занятия.\n'
-        'Запись на групповые занятия — в расписании.',
+        'Отмена доступна не позднее чем за 30 минут до начала занятия.',
         textAlign: TextAlign.center,
         style: text.bodySmall,
       ),
