@@ -167,6 +167,13 @@ class WidgetLkRepository {
     return parts.isEmpty ? null : parts.join(' ');
   }
 
+  int? _int(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.trim());
+    return null;
+  }
+
   Future<Paged<Visit>> visits(
     Session session,
     int page, {
@@ -181,8 +188,114 @@ class WidgetLkRepository {
         'filters': _auth(session),
       },
     );
-    return _paged(json, page, Visit.fromJson);
+    final paged = _paged(json, page, Visit.fromJson);
+    return Paged(
+      items: await _withVisitSubstitutes(paged.items),
+      total: paged.total,
+      page: paged.page,
+    );
   }
+
+  Future<List<Visit>> _withVisitSubstitutes(List<Visit> visits) async {
+    final groupVisits = visits
+        .where((visit) =>
+            visit.targetEntity == 'group' &&
+            visit.targetId != null &&
+            visit.visitedAt != null &&
+            visit.minutesBegin != null)
+        .toList();
+    if (groupVisits.isEmpty) return visits;
+
+    final days = groupVisits
+        .map((visit) => _utcDay(visit.visitedAt!))
+        .toList()
+      ..sort();
+    final from = days.first;
+    final to = days.last;
+    final fromSeconds = from.millisecondsSinceEpoch ~/ 1000;
+    final toSeconds = to.millisecondsSinceEpoch ~/ 1000;
+    final body = _scheduleBody(fromSeconds);
+    body['range'] = {'from': fromSeconds, 'to': toSeconds};
+
+    final substitutes = <String, _VisitSubstitute>{};
+    try {
+      final json = await api.post(
+        '${config.apiBasePath}/widget_schedule/changes',
+        body,
+      );
+      for (final item in _rawItems(json)) {
+        final key = _visitChangeKey(item);
+        if (key == null) continue;
+        final teacher = _personName(
+          item['teacher'] is Map ? item['teacher'] as Map : const {},
+        );
+        if (teacher == null) continue;
+        final source = _personName(
+          item['sourceTeacher'] is Map ? item['sourceTeacher'] as Map : const {},
+        );
+        final text = 'Замена: $teacher'
+            '${source != null ? ' (вместо $source)' : ''}';
+        final entry = substitutes.putIfAbsent(
+          key,
+          () => _VisitSubstitute(names: <String>[], text: text),
+        );
+        if (!entry.names.contains(teacher)) entry.names.add(teacher);
+      }
+    } catch (_) {
+      return visits;
+    }
+
+    if (substitutes.isEmpty) return visits;
+    final enriched = <Visit>[];
+    for (final visit in visits) {
+      final substitute = substitutes[_visitKey(visit)];
+      enriched.add(
+        substitute == null
+            ? visit
+            : visit.withSubstitutes(
+                names: substitute.names,
+                text: substitute.text,
+              ),
+      );
+    }
+    return enriched;
+  }
+
+  String? _visitChangeKey(Map<String, dynamic> item) {
+    final schedule =
+        item['schedule'] is Map ? item['schedule'] as Map : const {};
+    final group = schedule['group'] is Map ? schedule['group'] as Map : const {};
+    final day = _utcEpoch(item['date'] ?? schedule['date']);
+    final groupId = _int(group['id']);
+    final minutes = _int(schedule['minutesBegin']);
+    if (day == null || groupId == null || minutes == null) return null;
+    return '${_utcDay(day).millisecondsSinceEpoch}|$groupId|$minutes';
+  }
+
+  String? _visitKey(Visit visit) {
+    final day = visit.visitedAt;
+    if (day == null || visit.targetId == null || visit.minutesBegin == null) {
+      return null;
+    }
+    return '${_utcDay(day).millisecondsSinceEpoch}|'
+        '${visit.targetId}|${visit.minutesBegin}';
+  }
+
+  DateTime _utcDay(DateTime value) =>
+      DateTime.utc(value.year, value.month, value.day);
+
+  DateTime? _utcEpoch(Object? value) {
+    if (value is num) {
+      final seconds = value > 1000000000000 ? value ~/ 1000 : value;
+      return DateTime.fromMillisecondsSinceEpoch(
+        seconds.toInt() * 1000,
+        isUtc: true,
+      );
+    }
+    if (value is String) return DateTime.tryParse(value);
+    return null;
+  }
+
 
   Future<Paged<Deposit>> deposits(
     Session session,
@@ -317,6 +430,13 @@ class WidgetLkRepository {
     if (type != 0) return type;
     return a.title.compareTo(b.title);
   }
+}
+
+class _VisitSubstitute {
+  _VisitSubstitute({required this.names, required this.text});
+
+  final List<String> names;
+  final String text;
 }
 
 class _ScheduleExtras {

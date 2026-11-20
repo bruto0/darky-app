@@ -37,4 +37,17 @@ void main() {
 
     expect(visitTitle(visit), 'Бачата Intermediate');
   });
+
+  test('visit substitution has a red-line label', () {
+    final visit = Visit(
+      id: '3',
+      substituteTeacherNames: const ['Виталий Семьянов'],
+      substituteText: 'Замена: Виталий Семьянов (вместо Диего Кальдерон)',
+    );
+
+    expect(
+      visitSubstitution(visit),
+      'Замена: Виталий Семьянов (вместо Диего Кальдерон)',
+    );
+  });
 }

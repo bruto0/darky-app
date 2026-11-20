@@ -263,6 +263,7 @@ class VisitCard extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     final railColor = visitStyleColor(visit) ?? palette.pink;
     final teachers = visitTeachers(visit);
+    final substitution = visitSubstitution(visit);
     final branch = visitBranchName(visit);
 
     return Container(
@@ -319,6 +320,16 @@ class VisitCard extends StatelessWidget {
                 if (teachers != null) ...[
                   const SizedBox(height: 4),
                   _VisitMetaLine(icon: Icons.person_outline, text: teachers),
+                ],
+                if (substitution != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    substitution,
+                    style: text.bodySmall?.copyWith(
+                      color: palette.red,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
                 if (branch != null) ...[
                   const SizedBox(height: 4),

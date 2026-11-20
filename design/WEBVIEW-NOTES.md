@@ -140,4 +140,4 @@
 - HONOR BVL-AN16 (Android 17): проверялся старый WebView-вход (работал, но
   медленно); нативный экран и recovery на нём ещё не перепроверялись — по
   указанию дальше тестируем на AVD.
-- `flutter analyze` — 0; `flutter test` — **187 тестов**.
+- `flutter analyze` — 0; `flutter test` — **188 тестов**.

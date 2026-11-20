@@ -16,6 +16,7 @@ void main() {
   late WidgetLkRepository repository;
   late String lastPath;
   late Map<String, dynamic> lastBody;
+  late Map<String, dynamic> lastVisitsBody;
   late Map<String, dynamic> scheduleBody;
 
   final session = Session(
@@ -28,6 +29,7 @@ void main() {
   setUp(() async {
     lastPath = '';
     lastBody = {};
+    lastVisitsBody = {};
     scheduleBody = {};
     server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     final config = AppConfig(
@@ -109,22 +111,37 @@ void main() {
         };
       } else if (path.endsWith('/widget_schedule/changes')) {
         payload = {
-          'total': 1,
+          'total': 2,
           'items': [
             {
               'schedule': {'id': 1},
               'teacher': {'name': 'Игорь', 'lastName': 'Петров'},
             },
+            {
+              'date': 1795046400,
+              'schedule': {
+                'id': 343,
+                'minutesBegin': 1140,
+                'group': {'id': 29},
+              },
+              'teacher': {'name': 'Виталий', 'lastName': 'Семьянов'},
+              'sourceTeacher': {'name': 'Диего', 'lastName': 'Кальдерон'},
+            },
           ],
         };
       } else if (path.endsWith('/visits')) {
+        lastVisitsBody = lastBody;
         payload = {
           'total': 89,
           'items': [
             {
               'id': 1,
-              'visitDate': 1790000000,
+              'visitDate': 1795046400,
+              'minutesBegin': 1140,
               'target': {
+                'id': 29,
+                'entity': 'group',
+                'level': 'Intermediate',
                 'style': {'name': 'Бачата'},
                 'teacher1': {'name': 'Мария', 'lastName': 'Иванова'},
               },
@@ -221,11 +238,16 @@ void main() {
     expect(page.total, 89);
     expect(page.items.single.title, 'Бачата');
     expect(page.items.single.teacherNames, ['Мария Иванова']);
+    expect(page.items.single.substituteTeacherNames, ['Виталий Семьянов']);
+    expect(
+      page.items.single.substituteText,
+      'Замена: Виталий Семьянов (вместо Диего Кальдерон)',
+    );
     expect(page.items.single.serviceNumber, 514);
     expect(page.items.single.byAccount, isTrue);
-    expect(lastBody['sort'], {'visit_date': 'desc', 'created': 'desc'});
-    expect(lastBody['page'], 2);
-    expect(lastBody['filters']['client_id'], 255);
+    expect(lastVisitsBody['sort'], {'visit_date': 'desc', 'created': 'desc'});
+    expect(lastVisitsBody['page'], 2);
+    expect(lastVisitsBody['filters']['client_id'], 255);
   });
 
   test('loads deposits with type filter', () async {

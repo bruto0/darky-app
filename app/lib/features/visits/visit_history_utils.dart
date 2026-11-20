@@ -76,6 +76,18 @@ String? visitTeachers(Visit visit) {
   return single;
 }
 
+/// Red substitution line for a visited group, if the day had a replacement.
+String? visitSubstitution(Visit visit) {
+  final text = visit.substituteText?.trim();
+  if (text != null && text.isNotEmpty) return text;
+  final names = visit.substituteTeacherNames
+      .map((name) => name.trim())
+      .where((name) => name.isNotEmpty)
+      .toList();
+  if (names.isEmpty) return null;
+  return 'Замена: ${names.join(', ')}';
+}
+
 /// Branch shown next to the pin. Null when the API did not return a branch.
 String? visitBranchName(Visit visit) {
   final branch = visit.branchName?.trim();

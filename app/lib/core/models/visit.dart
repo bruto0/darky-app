@@ -8,6 +8,9 @@ class Visit {
     this.status,
     this.targetName,
     this.targetEntity,
+    this.targetId,
+    this.substituteTeacherNames = const [],
+    this.substituteText,
     this.teacherNames,
     this.serviceNumber,
     this.branchName,
@@ -65,6 +68,7 @@ class Visit {
       status: json['status']?.toString(),
       targetName: (json['targetName'] ?? targetName)?.toString(),
       targetEntity: targetEntity,
+      targetId: _int(target['id']) ?? _int(json['targetId']),
       teacherNames: teacherNames,
       serviceNumber: _int(service['number']) ??
           _int(json['service']) ??
@@ -87,6 +91,9 @@ class Visit {
   final String? status;
   final String? targetName;
   final String? targetEntity;
+  final int? targetId;
+  final List<String> substituteTeacherNames;
+  final String? substituteText;
   final List<String>? teacherNames;
   final int? serviceNumber;
   final String? branchName;
@@ -96,6 +103,34 @@ class Visit {
   final String? level;
   final int? minutesBegin;
   final int? minutesEnd;
+
+  Visit withSubstitutes({
+    required List<String> names,
+    String? text,
+  }) {
+    return Visit(
+      id: id,
+      title: title,
+      hallName: hallName,
+      teacherName: teacherName,
+      visitedAt: visitedAt,
+      status: status,
+      targetName: targetName,
+      targetEntity: targetEntity,
+      targetId: targetId,
+      substituteTeacherNames: names,
+      substituteText: text,
+      teacherNames: teacherNames,
+      serviceNumber: serviceNumber,
+      branchName: branchName,
+      byAccount: byAccount,
+      durationMinutes: durationMinutes,
+      styleColor: styleColor,
+      level: level,
+      minutesBegin: minutesBegin,
+      minutesEnd: minutesEnd,
+    );
+  }
 
   static int? _int(Object? value) {
     if (value is int) return value;
