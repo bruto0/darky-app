@@ -71,6 +71,7 @@ class WidgetLkRepository {
     final stickers = <String, String>{};
     final colors = <String, String>{};
     final changes = <String, String>{};
+    final substitutes = <String, List<String>>{};
     await Future.wait<void>([
       api
           .post(
@@ -99,8 +100,18 @@ class WidgetLkRepository {
           final teacher = _personName(
             item['teacher'] is Map ? item['teacher'] as Map : const {},
           );
+          final source = _personName(
+            item['sourceTeacher'] is Map
+                ? item['sourceTeacher'] as Map
+                : const {},
+          );
           final annotation = item['annotation']?.toString();
-          final text = teacher != null ? 'Замена: $teacher' : annotation;
+          if (teacher != null) {
+            substitutes.putIfAbsent(id, () => <String>[]).add(teacher);
+          }
+          final text = teacher != null
+              ? 'Замена: $teacher${source != null ? ' (вместо $source)' : ''}'
+              : annotation;
           if (text != null && text.isNotEmpty) changes[id] = text;
         }
       }).catchError((_) {}),
@@ -109,6 +120,7 @@ class WidgetLkRepository {
       stickers: stickers,
       stickerColors: colors,
       changes: changes,
+      substitutes: substitutes,
     );
   }
 
@@ -117,6 +129,7 @@ class WidgetLkRepository {
       stickerName: extras.stickers[item.id],
       stickerColor: extras.stickerColors[item.id],
       changeText: extras.changes[item.id],
+      substituteTeacherNames: extras.substitutes[item.id],
     );
   }
 
@@ -311,9 +324,11 @@ class _ScheduleExtras {
     required this.stickers,
     required this.stickerColors,
     required this.changes,
+    required this.substitutes,
   });
 
   final Map<String, String> stickers;
   final Map<String, String> stickerColors;
   final Map<String, String> changes;
+  final Map<String, List<String>> substitutes;
 }

@@ -9,7 +9,7 @@ flutter build apk --release
 ```
 
 Результат: `app/build/app/outputs/flutter-apk/app-release.apk` (universal APK,
-`ru.darky.dance`, version `1.0.0+1`, targetSdk 35).
+`ru.darky.dance`, version `1.0.1+2`, targetSdk 35).
 
 ## Подпись
 
@@ -42,7 +42,7 @@ release собирается с debug-подписью (для локально�
 
 - Устройство: **HONOR BVL-AN16**, Android 17.
 - Debug-сборка удалена (у неё другая подпись), release установлен через
-  wireless adb: `versionName=1.0.0`, `versionCode=1`.
+  wireless adb: `versionName=1.0.1`, `versionCode=2`.
 - Приложение запускается на экране нативного входа; телефон подставился
   Android Password Manager (autofill).
 - Release использует `FLAG_SECURE`, поэтому системные скриншоты экрана

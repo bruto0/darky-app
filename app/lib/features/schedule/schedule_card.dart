@@ -64,6 +64,10 @@ class ScheduleCard extends StatelessWidget {
         rail: rail,
         title: _groupTitle(item),
         hall: item.hallName,
+        mainTeachers: item.mainTeacherNames.isNotEmpty
+            ? item.mainTeacherNames
+            : [if (item.teacherName != null) item.teacherName!],
+        substituteTeachers: item.substituteTeacherNames,
         changeText: _changeLabel(item),
         stickerName: item.stickerName,
         stickerColor: item.stickerColor,
@@ -164,6 +168,8 @@ class ScheduleCard extends StatelessWidget {
     required Color rail,
     required String title,
     String? teacher,
+    List<String> mainTeachers = const [],
+    List<String> substituteTeachers = const [],
     String? hall,
     String? changeText,
     String? stickerName,
@@ -173,8 +179,17 @@ class ScheduleCard extends StatelessWidget {
   }) {
     final text = Theme.of(context).textTheme;
     final teacherText = _nonEmpty(teacher);
+    final mainTeacherText = _nonEmpty(
+      mainTeachers.where((name) => name.trim().isNotEmpty).join(', '),
+    );
+    final substituteText = _nonEmpty(
+      substituteTeachers.where((name) => name.trim().isNotEmpty).join(', '),
+    );
     final hallText = _nonEmpty(hall);
     final change = _nonEmpty(changeText);
+    final substitution = substituteText == null
+        ? change
+        : (change ?? 'Замена: $substituteText');
     final sticker = _nonEmpty(stickerName);
     final kind = _nonEmpty(kindLabel);
 
@@ -237,6 +252,22 @@ class ScheduleCard extends StatelessWidget {
                       ),
                     ),
                   ],
+                  if (mainTeacherText != null) ...[
+                    const SizedBox(height: 5),
+                    _IconLine(
+                      icon: Icons.people_outline,
+                      color: palette.violet,
+                      child: Text(
+                        'Основные: $mainTeacherText',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: text.bodySmall?.copyWith(
+                          color: palette.violet,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                   if (teacherText != null) ...[
                     const SizedBox(height: 5),
                     _IconLine(
@@ -266,10 +297,10 @@ class ScheduleCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                  if (change != null) ...[
+                  if (substitution != null) ...[
                     const SizedBox(height: 5),
                     Text(
-                      change,
+                      substitution,
                       style: text.bodySmall?.copyWith(
                         color: palette.red,
                         fontWeight: FontWeight.w600,

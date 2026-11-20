@@ -5,6 +5,8 @@ class ScheduleItem {
     required this.title,
     this.hallName,
     this.teacherName,
+    this.mainTeacherNames = const [],
+    this.substituteTeacherNames = const [],
     this.clientId,
     this.clientName,
     this.startsAt,
@@ -49,6 +51,12 @@ class ScheduleItem {
         _teacherName(teacher2) ??
         _teacherName(groupTeacher1) ??
         _teacherName(groupTeacher2);
+    final mainTeacherNames = _uniqueNames([
+      _teacherName(groupTeacher1),
+      _teacherName(groupTeacher2),
+      _teacherName(teacher1),
+      _teacherName(teacher2),
+    ]);
 
     return ScheduleItem(
       id: '${json['id'] ?? ''}',
@@ -56,6 +64,7 @@ class ScheduleItem {
       title: name ?? styleName ?? groupName ?? 'Занятие',
       hallName: (json['hallName'] ?? hall['name'])?.toString(),
       teacherName: (json['teacherName'] as String?) ?? teacherName,
+      mainTeacherNames: mainTeacherNames,
       clientId: _int(json['clientId']) ?? _int(client['id']),
       clientName: (json['clientName'] ?? _personName(client))?.toString(),
       startsAt: _date(json['startsAt'] ?? json['date']),
@@ -84,6 +93,8 @@ class ScheduleItem {
   final String title;
   final String? hallName;
   final String? teacherName;
+  final List<String> mainTeacherNames;
+  final List<String> substituteTeacherNames;
   final int? clientId;
   final String? clientName;
   final DateTime? startsAt;
@@ -113,11 +124,14 @@ class ScheduleItem {
     String? stickerColor,
     String? changeText,
     String? teacherName,
+    List<String>? mainTeacherNames,
+    List<String>? substituteTeacherNames,
     String? clientName,
     String? styleName,
     bool? isMine,
     bool clearClientName = false,
     bool clearTeacherName = false,
+    bool clearTeacherNames = false,
     bool clearStyleName = false,
     bool clearChangeText = false,
   }) {
@@ -129,6 +143,12 @@ class ScheduleItem {
       teacherName: clearTeacherName
           ? null
           : (teacherName ?? this.teacherName),
+      mainTeacherNames: clearTeacherNames
+          ? const []
+          : (mainTeacherNames ?? this.mainTeacherNames),
+      substituteTeacherNames: clearTeacherNames
+          ? const []
+          : (substituteTeacherNames ?? this.substituteTeacherNames),
       clientId: clientId,
       clientName: clearClientName ? null : (clientName ?? this.clientName),
       startsAt: startsAt,
@@ -157,6 +177,7 @@ class ScheduleItem {
       clientName: null,
       clearClientName: true,
       clearTeacherName: true,
+      clearTeacherNames: true,
       clearStyleName: true,
       clearChangeText: true,
     );
@@ -167,6 +188,16 @@ class ScheduleItem {
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value.trim());
     return null;
+  }
+
+  static List<String> _uniqueNames(List<String?> values) {
+    final names = <String>[];
+    for (final value in values) {
+      final name = value?.trim();
+      if (name == null || name.isEmpty) continue;
+      if (!names.contains(name)) names.add(name);
+    }
+    return names;
   }
 
   static String? _teacherName(Map teacher) {

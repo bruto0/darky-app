@@ -203,6 +203,7 @@ void main() {
     expect(items.first.isMine, isTrue);
     expect(items.first.stickerName, 'САМПО');
     expect(items.first.changeText, 'Замена: Игорь Петров');
+    expect(items.first.substituteTeacherNames, ['Игорь Петров']);
     expect(items.last.isMine, isFalse);
     expect(items.last.title, 'индив');
     expect(items.last.clientName, isNull);

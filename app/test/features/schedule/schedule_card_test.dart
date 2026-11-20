@@ -21,8 +21,10 @@ void main() {
       groupLevel: 'База 2.0',
       hallName: 'Большой зал',
       teacherName: 'Мария Иванова',
+      mainTeacherNames: ['Мария Иванова', 'Наталья Губина'],
+      substituteTeacherNames: ['Семьянов В. С.'],
       stickerName: 'сампо',
-      changeText: 'Семьянов В. С.',
+      changeText: 'Замена: Семьянов В. С.',
       minutesBegin: 840,
       minutesEnd: 900,
     );
@@ -35,12 +37,28 @@ void main() {
     expect(find.text('14:00'), findsOneWidget);
     expect(find.text('60 мин'), findsOneWidget);
 
+    expect(find.text('Основные: Мария Иванова, Наталья Губина'), findsOneWidget);
     final change = tester.widget<Text>(find.text('Замена: Семьянов В. С.'));
     expect(change.style?.color, AppPalette.light.red);
+  });
 
-    // Regular group staffing is never repeated in the card; a substitution is
-    // shown only as the red change line (DESIGN §5.5).
-    expect(find.textContaining('Мария'), findsNothing);
+  testWidgets('group card shows only main teachers without a substitution',
+      (tester) async {
+    final item = scheduleItem(
+      id: 'g2',
+      type: 0,
+      title: 'Бачата',
+      styleName: 'Бачата',
+      hallName: 'Большой зал',
+      mainTeacherNames: ['Мария Иванова', 'Наталья Губина'],
+      minutesBegin: 840,
+      minutesEnd: 900,
+    );
+
+    await tester.pumpWidget(testApp(ScheduleCard(item: item, clock: fixedClock())));
+
+    expect(find.text('Основные: Мария Иванова, Наталья Губина'), findsOneWidget);
+    expect(find.textContaining('Замена'), findsNothing);
   });
 
   testWidgets('own individual card shows client, teacher, hall and violet rail',
