@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/providers.dart';
 import '../../core/config/app_config.dart';
@@ -147,6 +148,18 @@ Future<void> showAboutAppDialog(BuildContext context, AppConfig config) {
   );
 }
 
+Future<void> _openClubLink(BuildContext context, String url) async {
+  final opened = await launchUrl(
+    Uri.parse(url),
+    mode: LaunchMode.externalApplication,
+  );
+  if (!opened && context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Не удалось открыть браузер')),
+    );
+  }
+}
+
 class _AboutAppDialog extends StatelessWidget {
   const _AboutAppDialog({required this.config});
 
@@ -210,7 +223,11 @@ class _AboutAppDialog extends StatelessWidget {
               const SizedBox(height: 16),
               _AboutRow(label: 'Версия', value: config.appVersion),
               _AboutRow(label: 'Платформа', value: 'Android 15+'),
-              _AboutRow(label: 'Клуб', value: config.origin),
+              _AboutRow(
+                label: 'Клуб',
+                value: config.origin,
+                onTap: () => _openClubLink(context, config.origin),
+              ),
               const SizedBox(height: 18),
               FilledButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -225,15 +242,30 @@ class _AboutAppDialog extends StatelessWidget {
 }
 
 class _AboutRow extends StatelessWidget {
-  const _AboutRow({required this.label, required this.value});
+  const _AboutRow({
+    required this.label,
+    required this.value,
+    this.onTap,
+  });
 
   final String label;
   final String value;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
     final text = Theme.of(context).textTheme;
+    final valueWidget = Text(
+      value,
+      textAlign: TextAlign.end,
+      style: text.bodySmall?.copyWith(
+        color: onTap == null ? palette.ink2 : palette.pinkDeep,
+        fontWeight: FontWeight.w700,
+        decoration: onTap == null ? null : TextDecoration.underline,
+        decorationColor: palette.pinkDeep,
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 9),
       child: Row(
@@ -248,14 +280,21 @@ class _AboutRow extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Text(
-              value,
-              textAlign: TextAlign.end,
-              style: text.bodySmall?.copyWith(
-                color: palette.ink2,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            child: onTap == null
+                ? valueWidget
+                : Semantics(
+                    button: true,
+                    link: true,
+                    label: 'Открыть $value в браузере',
+                    child: InkWell(
+                      onTap: onTap,
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: valueWidget,
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),

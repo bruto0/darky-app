@@ -82,6 +82,7 @@ class ScheduleCard extends StatelessWidget {
           title: _ownTitle(item, fallback: 'Индивидуальное занятие'),
           teacher: item.teacherName,
           hall: item.hallName,
+          kindLabel: 'Ваш индив',
           trailingIcon: Icons.person_outline,
         );
       } else {
@@ -89,7 +90,7 @@ class ScheduleCard extends StatelessWidget {
           context,
           palette: palette,
           rail: palette.muted.withValues(alpha: 0.35),
-          kind: 'индив',
+          kind: 'Индив',
           kindColor: palette.ink2,
           hall: item.hallName,
         );
@@ -101,7 +102,7 @@ class ScheduleCard extends StatelessWidget {
         rail: rail,
         title: _rentTitle(item),
         hall: item.hallName,
-        stickerName: item.isSampoSticker ? null : item.stickerName,
+        stickerName: item.stickerName,
         stickerColor: item.stickerColor,
         trailingIcon: Icons.meeting_room_outlined,
       );
@@ -145,10 +146,12 @@ class ScheduleCard extends StatelessWidget {
   }
 
   String _rentTitle(ScheduleItem item) {
-    final prefix = item.isSampoSticker ? 'сампо' : 'аренда';
     final tenant = _nonEmpty(item.clientDisplayName) ??
         _nonEmpty(item.clientName);
-    return tenant == null ? prefix : '$prefix $tenant';
+    if (item.isSampoSticker || item.isRentSticker) {
+      return tenant ?? '';
+    }
+    return tenant == null ? 'аренда' : 'аренда $tenant';
   }
 
   String? _changeLabel(ScheduleItem item) {
@@ -339,52 +342,64 @@ class ScheduleCard extends StatelessWidget {
         color: palette.line.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(14),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
-            width: 56,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  scheduleStartTime(item, clock),
-                  style: text.titleMedium?.copyWith(
-                    fontSize: 15,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+          Row(
+            children: [
+              SizedBox(
+                width: 56,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      scheduleStartTime(item, clock),
+                      style: text.titleMedium?.copyWith(
+                        fontSize: 15,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                    if (scheduleDurationText(item) case final duration?)
+                      Text(duration, style: text.bodySmall),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                width: 3,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: rail,
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  kind,
+                  style: text.bodyMedium?.copyWith(
+                    color: kindColor,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13.5,
                   ),
                 ),
-                if (scheduleDurationText(item) case final duration?)
-                  Text(duration, style: text.bodySmall),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          Container(
-            width: 3,
-            height: 24,
-            decoration: BoxDecoration(
-              color: rail,
-              borderRadius: BorderRadius.circular(3),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            kind,
-            style: text.bodyMedium?.copyWith(
-              color: kindColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 13.5,
-            ),
+              ),
+            ],
           ),
           if (hallText != null) ...[
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                hallText,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: text.bodySmall,
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.only(left: 69),
+              child: _IconLine(
+                icon: Icons.place_outlined,
+                color: palette.muted,
+                child: Text(
+                  hallText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: text.bodySmall,
+                ),
               ),
             ),
           ],

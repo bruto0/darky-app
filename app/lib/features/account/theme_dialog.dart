@@ -71,7 +71,7 @@ class ThemeDialog extends ConsumerWidget {
                     spacing: 10,
                     runSpacing: 10,
                     children: [
-                      for (final mode in AppThemeMode.values)
+                      for (final mode in AppThemeMode.selectable)
                         SizedBox(
                           width: cardWidth,
                           child: _ThemeCard(

@@ -79,6 +79,7 @@ void main() {
     );
 
     expect(find.text('Анна Смирнова'), findsOneWidget);
+    expect(find.text('Ваш индив'), findsOneWidget);
     expect(find.text('Андрей Чистяков'), findsOneWidget);
     expect(find.text('Средний зал'), findsOneWidget);
     expect(find.text('12:00'), findsOneWidget);
@@ -150,7 +151,7 @@ void main() {
       testApp(ScheduleCard(item: item, clock: fixedClock(), clientId: 255)),
     );
 
-    expect(find.text('индив'), findsOneWidget);
+    expect(find.text('Индив'), findsOneWidget);
     expect(find.text('Малый зал'), findsOneWidget);
     expect(find.text('13:00'), findsOneWidget);
     expect(find.textContaining('Пётр'), findsNothing);
@@ -226,12 +227,13 @@ void main() {
       testApp(ScheduleCard(item: item, clock: fixedClock(), clientId: 255)),
     );
 
-    expect(find.text('сампо Пётр Петров'), findsOneWidget);
+    expect(find.text('Пётр Петров'), findsOneWidget);
+    expect(find.text('сампо Пётр Петров'), findsNothing);
     expect(find.text('аренда Пётр Петров'), findsNothing);
-    expect(find.text('САМПО'), findsNothing);
+    expect(find.text('САМПО'), findsOneWidget);
     expect(
       tester.getTopLeft(find.text('Большой зал')).dy,
-      greaterThan(tester.getTopLeft(find.text('сампо Пётр Петров')).dy),
+      greaterThan(tester.getTopLeft(find.text('Пётр Петров')).dy),
     );
   });
 

@@ -105,8 +105,6 @@ class BookingsScreen extends ConsumerWidget {
     if (list.isEmpty) {
       return [
         _EmptyState(onOpenSchedule: openSchedule),
-        const SizedBox(height: 14),
-        _ScheduleCta(onOpenSchedule: openSchedule),
       ];
     }
 
@@ -122,8 +120,6 @@ class BookingsScreen extends ConsumerWidget {
       ],
       const SizedBox(height: 12),
       const _CancellationRule(),
-      const SizedBox(height: 14),
-      _ScheduleCta(onOpenSchedule: openSchedule),
     ];
   }
 }
@@ -141,65 +137,6 @@ class _CancellationRule extends StatelessWidget {
         'Запись на групповые занятия — в расписании.',
         textAlign: TextAlign.center,
         style: text.bodySmall,
-      ),
-    );
-  }
-}
-
-class _ScheduleCta extends StatelessWidget {
-  const _ScheduleCta({required this.onOpenSchedule});
-
-  final VoidCallback onOpenSchedule;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-    final text = Theme.of(context).textTheme;
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: palette.surface,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: palette.line),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: palette.pinkSoft,
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Icon(
-              Icons.calendar_month_outlined,
-              size: 22,
-              color: palette.pinkDeep,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Хотите записаться?', style: text.titleMedium),
-                const SizedBox(height: 2),
-                Text('Выберите занятие в расписании.', style: text.bodySmall),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          OutlinedButton(
-            onPressed: onOpenSchedule,
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size(44, 44),
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              side: BorderSide(color: palette.line),
-              foregroundColor: palette.ink,
-            ),
-            child: const Text('Расписание'),
-          ),
-        ],
       ),
     );
   }

@@ -83,7 +83,7 @@ void main() {
     expect(find.text('· понедельник'), findsOneWidget);
     expect(find.text('Отменить запись'), findsOneWidget);
     expect(find.textContaining('не позднее чем за 30 минут'), findsOneWidget);
-    expect(find.text('Хотите записаться?'), findsOneWidget);
+    expect(find.text('Хотите записаться?'), findsNothing);
 
     expect(find.text('Малый зал'), findsNothing);
     expect(find.text('19'), findsNothing);
@@ -171,21 +171,7 @@ void main() {
     expect(find.text('Не удалось открыть браузер'), findsOneWidget);
   });
 
-  testWidgets('schedule CTA calls the callback', (tester) async {
-    var opened = false;
-    await pumpScreen(
-      tester,
-      load: () => [rentBooking],
-      onOpenSchedule: () => opened = true,
-    );
-
-    await tester.tap(find.text('Расписание'));
-    await tester.pumpAndSettle();
-
-    expect(opened, isTrue);
-  });
-
-  testWidgets('empty state offers the schedule CTA', (tester) async {
+  testWidgets('empty state offers the schedule button', (tester) async {
     var opened = false;
     await pumpScreen(
       tester,
@@ -195,7 +181,7 @@ void main() {
 
     expect(find.text('0 записей'), findsOneWidget);
     expect(find.text('Пока нет записей'), findsOneWidget);
-    expect(find.text('Хотите записаться?'), findsOneWidget);
+    expect(find.text('Хотите записаться?'), findsNothing);
 
     await tester.tap(find.text('Открыть расписание'));
     await tester.pumpAndSettle();
@@ -279,11 +265,6 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text('2 записи'), findsOneWidget);
     expect(find.text('Отменить запись'), findsNWidgets(2));
-    await tester.scrollUntilVisible(
-      find.text('Хотите записаться?'),
-      240,
-      scrollable: find.byType(Scrollable).first,
-    );
-    expect(find.text('Хотите записаться?'), findsOneWidget);
+    expect(find.text('Хотите записаться?'), findsNothing);
   });
 }

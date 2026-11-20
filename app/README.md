@@ -7,7 +7,7 @@
 
 Исторические Foundation-скриншоты (до MVP-разделов):
 
-| Светлая / розовая | Тёмная |
+| Светлая | Тёмная |
 |---|---|
 | ![Foundation home](docs/screenshots/foundation-home.png) | ![Foundation dark](docs/screenshots/foundation-dark.png) |
 
@@ -34,7 +34,7 @@ flutter run -d emulator-5554
 
 ```powershell
 flutter analyze
-flutter test      # 186 tests
+flutter test      # 185 tests
 flutter build apk --debug
 ```
 
@@ -43,7 +43,7 @@ APK: `app/build/app/outputs/flutter-apk/app-debug.apk`.
 
 ## Что уже есть
 
-- **4 темы** — Светлая, Тёмная «Графит», Розовая «Бренд», Системная;
+- **2 темы** — Светлая и Тёмная «Графит»;
   `ThemeController` + `shared_preferences`; переключение сохраняется.
 - **4 таба** — Абонемент, Посещения, Покупки, Записи; реальные экраны, не заглушки.
 - **Абонемент/профиль** — `widget_client_lk/accounts`, карточки «Профи»/«Стандарт»,

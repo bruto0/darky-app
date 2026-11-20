@@ -18,13 +18,16 @@ class ThemeController extends Notifier<AppThemeMode> {
   @override
   AppThemeMode build() {
     final prefs = ref.read(sharedPreferencesProvider);
-    return AppThemeMode.fromStorage(prefs.getString(_key));
+    return AppThemeMode.normalize(
+      AppThemeMode.fromStorage(prefs.getString(_key)),
+    );
   }
 
   void setMode(AppThemeMode mode) {
-    if (state == mode) return;
-    state = mode;
+    final normalized = AppThemeMode.normalize(mode);
+    if (state == normalized) return;
+    state = normalized;
     final prefs = ref.read(sharedPreferencesProvider);
-    unawaited(prefs.setString(_key, mode.storageValue));
+    unawaited(prefs.setString(_key, normalized.storageValue));
   }
 }

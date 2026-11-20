@@ -190,7 +190,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Оформление применится сразу'), findsOneWidget);
-    for (final mode in AppThemeMode.values) {
+    for (final mode in AppThemeMode.selectable) {
       expect(find.text(mode.label), findsOneWidget);
     }
 

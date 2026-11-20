@@ -42,18 +42,18 @@ Future<ProviderContainer> _pumpHarness(
 }
 
 void main() {
-  testWidgets('theme dialog shows all four designed options', (tester) async {
+  testWidgets('theme dialog shows only light and dark options', (tester) async {
     await _pumpHarness(tester);
 
     expect(find.text('Тема оформления'), findsOneWidget);
     expect(find.text('Оформление применится сразу'), findsOneWidget);
-    for (final mode in AppThemeMode.values) {
+    for (final mode in AppThemeMode.selectable) {
       expect(find.text(mode.label), findsOneWidget);
     }
     expect(find.text('Свет'), findsNothing);
     expect(find.text('Графит'), findsOneWidget);
-    expect(find.text('Бренд'), findsOneWidget);
-    expect(find.text('Авто'), findsOneWidget);
+    expect(find.text('Розовая'), findsNothing);
+    expect(find.text('Системная'), findsNothing);
     expect(find.text('Готово'), findsOneWidget);
   });
 
@@ -77,12 +77,12 @@ void main() {
     expect(find.text('Тема оформления'), findsNothing);
   });
 
-  testWidgets('stored theme marks the matching card on cold open', (
+  testWidgets('stored legacy theme falls back to light on cold open', (
     tester,
   ) async {
     await _pumpHarness(tester, stored: {'theme_mode': 'pink'});
 
-    expect(find.byKey(const ValueKey('theme-check-pink')), findsOneWidget);
-    expect(find.byKey(const ValueKey('theme-check-light')), findsNothing);
+    expect(find.byKey(const ValueKey('theme-check-light')), findsOneWidget);
+    expect(find.byKey(const ValueKey('theme-check-pink')), findsNothing);
   });
 }

@@ -13,7 +13,7 @@ void main() {
     );
     addTearDown(container.dispose);
 
-    expect(container.read(themeControllerProvider), AppThemeMode.pink);
+    expect(container.read(themeControllerProvider), AppThemeMode.light);
     container
         .read(themeControllerProvider.notifier)
         .setMode(AppThemeMode.dark);

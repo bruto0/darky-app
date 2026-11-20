@@ -115,9 +115,9 @@ void main() {
     // Exactly one Scrollable: the parent CustomScrollView. No nested list.
     expect(find.byType(Scrollable), findsOneWidget);
 
-    // Privacy: the foreign individual exposes only "индив" and the hall;
+    // Privacy: the foreign individual exposes only "Индив" and the hall;
     // type 2 rent now intentionally shows the tenant name.
-    expect(find.text('индив'), findsOneWidget);
+    expect(find.text('Индив'), findsOneWidget);
     expect(find.text('аренда Пётр Петров'), findsOneWidget);
   });
 

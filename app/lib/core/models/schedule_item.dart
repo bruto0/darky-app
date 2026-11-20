@@ -202,6 +202,9 @@ class ScheduleItem {
   bool get isSampoSticker =>
       stickerName?.trim().toLowerCase() == 'сампо';
 
+  bool get isRentSticker =>
+      stickerName?.trim().toLowerCase() == 'аренда';
+
   static int? _int(Object? value) {
     if (value is int) return value;
     if (value is num) return value.toInt();

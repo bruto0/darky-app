@@ -22,6 +22,11 @@ enum AppThemeMode {
         AppThemeMode.system => 'Как в настройках Android',
       };
 
+  static const selectable = [AppThemeMode.light, AppThemeMode.dark];
+
+  static AppThemeMode normalize(AppThemeMode mode) =>
+      mode == AppThemeMode.dark ? AppThemeMode.dark : AppThemeMode.light;
+
   static AppThemeMode fromStorage(String? value) {
     return AppThemeMode.values.firstWhere(
       (mode) => mode.name == value,
