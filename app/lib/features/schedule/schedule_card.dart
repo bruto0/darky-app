@@ -481,12 +481,18 @@ class _StickerChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final background = _background();
-    final foreground = background == palette.yellow ? palette.ink : palette.ink2;
+    final isDark = palette.brightness == Brightness.dark;
+    final accent = _background();
+    final foreground = isDark
+        ? (label.toLowerCase().contains('сампо')
+            ? const Color(0xFFE8BF3F)
+            : palette.pinkDeep)
+        : (accent == palette.yellow ? palette.ink : palette.ink2);
     return Container(
+      key: ValueKey('sticker-chip-${label.toLowerCase()}'),
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: background,
+        color: isDark ? Colors.transparent : accent,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(

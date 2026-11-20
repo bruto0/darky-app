@@ -42,6 +42,51 @@ void main() {
     expect(change.style?.color, AppPalette.light.red);
   });
 
+  testWidgets('dark theme stickers use accent text on a transparent background',
+      (tester) async {
+    final sampo = scheduleItem(
+      id: 'r-dark-sampo',
+      type: 2,
+      clientName: 'Анна Смирнова',
+      stickerName: 'САМПО',
+      hallName: 'Большой зал',
+      minutesBegin: 900,
+      minutesEnd: 960,
+    );
+
+    await tester.pumpWidget(
+      testApp(ScheduleCard(item: sampo, clock: fixedClock()), dark: true),
+    );
+
+    final sampoText = tester.widget<Text>(find.text('САМПО'));
+    expect(sampoText.style?.color, const Color(0xFFE8BF3F));
+    final sampoChip = tester.widget<Container>(
+      find.byKey(const ValueKey('sticker-chip-сампо')),
+    );
+    expect((sampoChip.decoration as BoxDecoration).color, Colors.transparent);
+
+    final rent = scheduleItem(
+      id: 'r-dark-rent',
+      type: 2,
+      clientName: 'Пётр Петров',
+      stickerName: 'АРЕНДА',
+      hallName: 'Малый зал',
+      minutesBegin: 960,
+      minutesEnd: 1020,
+    );
+
+    await tester.pumpWidget(
+      testApp(ScheduleCard(item: rent, clock: fixedClock()), dark: true),
+    );
+
+    final rentText = tester.widget<Text>(find.text('АРЕНДА'));
+    expect(rentText.style?.color, AppPalette.dark.pinkDeep);
+    final rentChip = tester.widget<Container>(
+      find.byKey(const ValueKey('sticker-chip-аренда')),
+    );
+    expect((rentChip.decoration as BoxDecoration).color, Colors.transparent);
+  });
+
   testWidgets('group card shows only main teachers without a substitution',
       (tester) async {
     final item = scheduleItem(

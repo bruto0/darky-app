@@ -7,6 +7,7 @@ class Visit {
     this.visitedAt,
     this.status,
     this.targetName,
+    this.targetEntity,
     this.teacherNames,
     this.serviceNumber,
     this.branchName,
@@ -63,6 +64,7 @@ class Visit {
       visitedAt: _date(json['visit_date'] ?? json['visitDate'] ?? json['visitedAt']),
       status: json['status']?.toString(),
       targetName: (json['targetName'] ?? targetName)?.toString(),
+      targetEntity: targetEntity,
       teacherNames: teacherNames,
       serviceNumber: _int(service['number']) ??
           _int(json['service']) ??
@@ -84,6 +86,7 @@ class Visit {
   final DateTime? visitedAt;
   final String? status;
   final String? targetName;
+  final String? targetEntity;
   final List<String>? teacherNames;
   final int? serviceNumber;
   final String? branchName;

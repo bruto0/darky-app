@@ -48,12 +48,20 @@ String visitServiceLabel(Visit visit) {
 }
 
 /// Lesson/style title with a safe fallback when the vendor omits it.
+/// Group visits get the same level suffix as schedule cards.
 String visitTitle(Visit visit) {
-  final title = visit.title?.trim();
-  if (title != null && title.isNotEmpty) return title;
-  final target = visit.targetName?.trim();
-  if (target != null && target.isNotEmpty) return target;
-  return 'Занятие';
+  final base = visit.title?.trim();
+  final fallback = visit.targetName?.trim();
+  final title = base != null && base.isNotEmpty
+      ? base
+      : fallback != null && fallback.isNotEmpty
+          ? fallback
+          : 'Занятие';
+  if (visit.targetEntity != 'group') return title;
+  final level = visit.level?.trim();
+  if (level == null || level.isEmpty) return title;
+  if (title.toLowerCase().contains(level.toLowerCase())) return title;
+  return '$title $level';
 }
 
 /// «Кальдерон Диего, Губина Наталья Леонидовна» or null when nobody came back.

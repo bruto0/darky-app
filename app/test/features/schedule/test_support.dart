@@ -59,11 +59,11 @@ ScheduleItem scheduleItem({
   );
 }
 
-Widget testApp(Widget child) {
+Widget testApp(Widget child, {bool dark = false}) {
   return MaterialApp(
-    theme: AppTheme.light,
+    theme: dark ? AppTheme.dark : AppTheme.light,
     home: Scaffold(
-      backgroundColor: AppPalette.light.bg,
+      backgroundColor: dark ? AppPalette.dark.bg : AppPalette.light.bg,
       body: child,
     ),
   );

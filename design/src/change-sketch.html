@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D'arky — эскиз правок</title>
+<style>
+  :root {
+    --bg: #f4f0f5;
+    --paper: #fffdfd;
+    --ink: #1c1822;
+    --ink2: #615968;
+    --muted: #938a99;
+    --line: #e9e1eb;
+    --pink: #c27ba0;
+    --pink-soft: #f7e6ee;
+    --violet: #6c5ce7;
+    --violet-soft: #efeaFF;
+    --yellow: #f2c94c;
+    --green: #4d9179;
+    --dark: #0d0c11;
+    --dark-card: #17151d;
+    --dark-ink: #f4f0f6;
+    --dark-ink2: #c9c0ce;
+    --dark-muted: #958c9d;
+    --dark-line: #2b2732;
+    --dark-pink: #e39bc2;
+    --dark-violet: #a99bff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #e9e3ec; color: var(--ink); font-family: 'Manrope', 'Segoe UI', sans-serif; }
+  body { padding: 44px 48px 54px; }
+  .board { width: 1180px; margin: 0 auto; }
+  .topline { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px; }
+  .eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 1.8px; color: var(--pink); text-transform: uppercase; }
+  h1 { margin: 5px 0 0; font-size: 31px; line-height: 1.12; letter-spacing: -0.6px; }
+  .sub { margin: 8px 0 0; color: var(--ink2); font-size: 13.5px; line-height: 1.5; max-width: 760px; }
+  .badge { border: 1px solid var(--line); background: rgba(255,255,255,.55); border-radius: 999px; padding: 8px 12px; font-size: 11px; font-weight: 800; color: var(--ink2); white-space: nowrap; }
+  .section { margin-top: 26px; }
+  .section-head { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; }
+  .section-num { width: 23px; height: 23px; border-radius: 8px; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 800; }
+  .section-title { font-size: 14px; font-weight: 800; letter-spacing: .1px; }
+  .section-note { color: var(--ink2); font-size: 12px; margin-left: auto; }
+  .row { display: flex; gap: 18px; align-items: stretch; }
+  .panel { flex: 1; background: var(--paper); border: 1px solid var(--line); border-radius: 22px; padding: 16px; box-shadow: 0 8px 22px rgba(36,24,42,.05); }
+  .panel.dark-panel { background: var(--dark); border-color: #26212d; color: var(--dark-ink); }
+  .panel-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .tag-now, .tag-new { font-size: 9px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; border-radius: 999px; padding: 4px 8px; }
+  .tag-now { color: var(--muted); border: 1px solid var(--line); }
+  .tag-new { color: #fff; background: var(--ink); }
+  .dark-panel .tag-now { color: var(--dark-muted); border-color: var(--dark-line); }
+  .dark-panel .tag-new { color: var(--dark); background: var(--dark-ink); }
+  .phone { width: 342px; margin: 0 auto; border-radius: 28px; background: var(--bg); padding: 12px 10px; border: 1px solid var(--line); }
+  .dark-phone { background: var(--dark); border-color: var(--dark-line); }
+  .screen-title { font-size: 20px; font-weight: 800; letter-spacing: -0.2px; padding: 4px 8px 0; }
+  .screen-sub { font-size: 10.5px; color: var(--muted); padding: 3px 8px 10px; }
+  .visit-card, .schedule-card { background: #fff; border: 1px solid #eee6ef; border-radius: 18px; padding: 12px; display: flex; gap: 12px; }
+  .visit-card + .visit-card, .schedule-card + .schedule-card { margin-top: 9px; }
+  .date { width: 42px; flex: 0 0 42px; text-align: center; padding-top: 2px; }
+  .date .d { font-size: 20px; font-weight: 800; line-height: 1; }
+  .date .m { font-size: 9px; font-weight: 800; color: var(--pink); letter-spacing: .8px; margin-top: 3px; }
+  .visit-main { flex: 1; min-width: 0; }
+  .visit-title { font-size: 13.5px; font-weight: 800; line-height: 1.3; }
+  .visit-title .level { color: var(--pink); }
+  .visit-teacher { margin-top: 4px; color: var(--ink2); font-size: 10.5px; font-weight: 600; }
+  .visit-meta { margin-top: 5px; color: var(--muted); font-size: 10px; display: flex; gap: 5px; align-items: center; }
+  .chip { display: inline-flex; align-items: center; border-radius: 6px; background: var(--pink-soft); color: var(--pink); font-size: 8.5px; font-weight: 800; letter-spacing: .5px; padding: 3px 6px; text-transform: uppercase; }
+  .callout { margin-top: 11px; border-left: 3px solid var(--pink); background: #fbf4f8; border-radius: 0 10px 10px 0; padding: 9px 10px; font-size: 11px; color: var(--ink2); line-height: 1.45; }
+  .callout b { color: var(--ink); }
+  .dark-panel .callout { background: #1d1923; border-left-color: var(--dark-pink); color: var(--dark-ink2); }
+  .dark-panel .callout b { color: var(--dark-ink); }
+  .schedule-card { align-items: flex-start; }
+  .time { width: 48px; flex: 0 0 48px; padding-top: 1px; }
+  .time .t { font-size: 14px; font-weight: 800; font-feature-settings: "tnum"; }
+  .time .dur { font-size: 9px; color: var(--muted); margin-top: 2px; }
+  .rail { width: 3px; align-self: stretch; border-radius: 4px; background: var(--pink); margin: 1px 0; }
+  .sc-main { flex: 1; min-width: 0; }
+  .sc-head { display: flex; align-items: flex-start; gap: 7px; }
+  .sc-title { flex: 1; min-width: 0; font-size: 13px; font-weight: 800; line-height: 1.3; }
+  .sticker { flex: 0 0 auto; border-radius: 7px; padding: 4px 6px; font-size: 8.5px; font-weight: 800; letter-spacing: .55px; line-height: 1.1; text-transform: uppercase; white-space: nowrap; }
+  .sticker.sampo-filled { background: var(--yellow); color: #221d10; }
+  .sticker.rent-filled { background: var(--pink-soft); color: #8f4f6e; }
+  .sticker.sampo-text { background: transparent; color: #e8bf3f; }
+  .sticker.rent-text { background: transparent; color: var(--dark-pink); }
+  .sc-teacher { margin-top: 4px; font-size: 10px; font-weight: 600; color: var(--ink2); }
+  .sc-hall { margin-top: 5px; font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+  .dark-phone .visit-card, .dark-phone .schedule-card { background: var(--dark-card); border-color: var(--dark-line); }
+  .dark-phone .screen-title { color: var(--dark-ink); }
+  .dark-phone .screen-sub, .dark-phone .sc-hall, .dark-phone .time .dur { color: var(--dark-muted); }
+  .dark-phone .visit-title, .dark-phone .sc-title { color: var(--dark-ink); }
+  .dark-phone .visit-teacher, .dark-phone .visit-meta, .dark-phone .sc-teacher { color: var(--dark-ink2); }
+  .dark-phone .rail { background: var(--dark-pink); }
+  .dark-phone .chip { background: #2a2431; color: var(--dark-violet); }
+  .arrow { align-self: center; width: 34px; height: 34px; border-radius: 50%; background: #fff; border: 1px solid var(--line); display: grid; place-items: center; color: var(--ink2); font-size: 17px; flex: 0 0 34px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; color: var(--ink2); font-size: 10.5px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+  .footer { margin-top: 24px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 10.5px; border-top: 1px solid #dcd3e0; padding-top: 14px; }
+  .footer b { color: var(--ink2); }
+  .aside { width: 240px; flex: 0 0 240px; background: rgba(255,255,255,.55); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
+  .aside h3 { margin: 0 0 7px; font-size: 11px; letter-spacing: .8px; text-transform: uppercase; color: var(--pink); }
+  .aside p { margin: 0 0 10px; font-size: 10.5px; line-height: 1.5; color: var(--ink2); }
+  .aside ul { margin: 0; padding-left: 15px; color: var(--ink2); font-size: 10.5px; line-height: 1.55; }
+  .aside li { margin-bottom: 5px; }
+  .wide { display: flex; gap: 18px; align-items: stretch; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="topline">
+    <div>
+      <div class="eyebrow">D'arky · UI-эскиз перед правкой</div>
+      <h1>Уровень в посещениях и стикеры в тёмной теме</h1>
+      <p class="sub">Две точечные правки. Светлая тема и остальные карточки не меняются. Ниже — «сейчас» и предлагаемый вид.</p>
+    </div>
+    <div class="badge">187 тестов · release 1.0.6</div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">1</div>
+      <div class="section-title">Посещения: уровень группового занятия</div>
+      <div class="section-note">только для записей с <b>target.entity = group</b> и непустым <b>target.level</b></div>
+    </div>
+    <div class="row">
+      <div class="panel">
+        <div class="panel-label"><span class="tag-now">Сейчас</span><span style="font-size:10px;color:var(--muted)">без уровня</span></div>
+        <div class="phone">
+          <div class="screen-title">Посещения</div>
+          <div class="screen-sub">89 посещений</div>
+          <div class="visit-card">
+            <div class="date"><div class="d">19</div><div class="m">НОЯ</div></div>
+            <div class="visit-main">
+              <div class="visit-title">Бачата</div>
+              <div class="visit-teacher">Диего Кальдерон</div>
+              <div class="visit-meta">Абонемент № 514 · D'arky Dance · Главный</div>
+            </div>
+          </div>
+          <div class="visit-card">
+            <div class="date"><div class="d">16</div><div class="m">НОЯ</div></div>
+            <div class="visit-main">
+              <div class="visit-title">Индивидуальное занятие</div>
+              <div class="visit-teacher">Андрей Чистяков</div>
+              <div class="visit-meta">Разовое · Малый зал</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="panel">
+        <div class="panel-label"><span class="tag-new">Предлагаю</span><span style="font-size:10px;color:var(--muted)">уровень в той же строке</span></div>
+        <div class="phone">
+          <div class="screen-title">Посещения</div>
+          <div class="screen-sub">89 посещений</div>
+          <div class="visit-card">
+            <div class="date"><div class="d">19</div><div class="m">НОЯ</div></div>
+            <div class="visit-main">
+              <div class="visit-title">Бачата <span class="level">Intermediate</span></div>
+              <div class="visit-teacher">Диего Кальдерон</div>
+              <div class="visit-meta">Абонемент № 514 · D'arky Dance · Главный</div>
+            </div>
+          </div>
+          <div class="visit-card">
+            <div class="date"><div class="d">16</div><div class="m">НОЯ</div></div>
+            <div class="visit-main">
+              <div class="visit-title">Индивидуальное занятие</div>
+              <div class="visit-teacher">Андрей Чистяков</div>
+              <div class="visit-meta">Разовое · Малый зал</div>
+            </div>
+          </div>
+          <div class="callout"><b>Формат:</b> «Бачата Intermediate» — как в расписании: название стиля/группы + уровень. Если уровня нет, остаётся просто «Бачата».</div>
+        </div>
+      </div>
+      <div class="aside">
+        <h3>Правило</h3>
+        <p><b>Групповые:</b> к названию добавляем <b>level</b> из target.</p>
+        <p><b>Индивидуальные и аренда:</b> без изменений.</p>
+        <ul>
+          <li>уровень не дублируем, если он уже есть в названии;</li>
+          <li>пустой/null — не добавляем;</li>
+          <li>стиль уровня — акцентный, как в расписании.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">2</div>
+      <div class="section-title">Тёмная тема: стикеры «сампо» и «аренда»</div>
+      <div class="section-note">фон прозрачный · текст цветом прежнего фона</div>
+    </div>
+    <div class="wide">
+      <div class="panel dark-panel">
+        <div class="panel-label"><span class="tag-now">Сейчас · тёмная</span><span style="font-size:10px;color:var(--dark-muted)">заливка</span></div>
+        <div class="phone dark-phone">
+          <div class="screen-title">Расписание</div>
+          <div class="screen-sub">Сегодня, 19 ноября</div>
+          <div class="schedule-card">
+            <div class="time"><div class="t">18:00</div><div class="dur">60 мин</div></div>
+            <div class="rail"></div>
+            <div class="sc-main">
+              <div class="sc-head"><div class="sc-title">Анна Смирнова</div><span class="sticker sampo-filled">САМПО</span></div>
+              <div class="sc-hall">◉ Большой зал</div>
+            </div>
+          </div>
+          <div class="schedule-card">
+            <div class="time"><div class="t">19:00</div><div class="dur">60 мин</div></div>
+            <div class="rail" style="background:var(--dark-violet)"></div>
+            <div class="sc-main">
+              <div class="sc-head"><div class="sc-title">Пётр Петров</div><span class="sticker rent-filled">АРЕНДА</span></div>
+              <div class="sc-hall">◉ Малый зал</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="panel dark-panel">
+        <div class="panel-label"><span class="tag-new">Предлагаю · тёмная</span><span style="font-size:10px;color:var(--dark-muted)">без заливки</span></div>
+        <div class="phone dark-phone">
+          <div class="screen-title">Расписание</div>
+          <div class="screen-sub">Сегодня, 19 ноября</div>
+          <div class="schedule-card">
+            <div class="time"><div class="t">18:00</div><div class="dur">60 мин</div></div>
+            <div class="rail"></div>
+            <div class="sc-main">
+              <div class="sc-head"><div class="sc-title">Анна Смирнова</div><span class="sticker sampo-text">САМПО</span></div>
+              <div class="sc-hall">◉ Большой зал</div>
+            </div>
+          </div>
+          <div class="schedule-card">
+            <div class="time"><div class="t">19:00</div><div class="dur">60 мин</div></div>
+            <div class="rail" style="background:var(--dark-violet)"></div>
+            <div class="sc-main">
+              <div class="sc-head"><div class="sc-title">Пётр Петров</div><span class="sticker rent-text">АРЕНДА</span></div>
+              <div class="sc-hall">◉ Малый зал</div>
+            </div>
+          </div>
+          <div class="callout"><b>Стикер:</b> текст жёлтый/розовый, фон полностью прозрачный. В светлой теме — без изменений.</div>
+        </div>
+      </div>
+      <div class="aside">
+        <h3>Токены</h3>
+        <div class="legend">
+          <span><i class="dot" style="background:#f2c94c"></i> сампо</span>
+          <span><i class="dot" style="background:#e39bc2"></i> аренда</span>
+          <span><i class="dot" style="background:#17151d;border:1px solid #2b2732"></i> фон карточки</span>
+        </div>
+        <p style="margin-top:10px">Цвет шрифта = текущий цвет фона стикера. Фон стикера = <b>transparent</b>.</p>
+        <p>Контраст на тёмной карточке: жёлтый и розовый остаются читаемыми; заливка больше не «светит» пятном.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span><b>Эскиз, не финальная реализация.</b> После согласования — код, тесты и release.</span><span>D'arky · 20.11.2026</span></div>
+</div>
+</body>
+</html>

@@ -81,20 +81,7 @@ class HomeHeader extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 4,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      _BonusChip(bonus: profile.bonus),
-                      Text(
-                        profileBranchLine(profile),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: text.bodySmall,
-                      ),
-                    ],
-                  ),
+                  _BonusChip(bonus: profile.bonus),
                 ],
               ),
             ),

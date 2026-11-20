@@ -34,7 +34,7 @@ flutter run -d emulator-5554
 
 ```powershell
 flutter analyze
-flutter test      # 185 tests
+flutter test      # 187 tests
 flutter build apk --debug
 ```
 
