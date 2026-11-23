@@ -48,7 +48,10 @@ open ios/Runner.xcworkspace
 выберите профиль в Xcode.
 
 Keychain Sharing уже добавлен в `Runner/Runner.entitlements` — он нужен
-`flutter_secure_storage` для хранения сессии.
+`flutter_secure_storage` для хранения сессии. В Apple Developer у App ID
+`ru.darky.dance` должна быть включена capability **Keychain Sharing**; без
+неё provisioning profile не совпадёт с entitlements, и сборка на устройство
+завершится ошибкой подписи.
 
 ## Запуск и сборка
 
