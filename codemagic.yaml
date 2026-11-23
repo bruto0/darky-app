@@ -1,0 +1,108 @@
+# Codemagic CI/CD for D'arky — iOS only.
+#
+# Workflows:
+#   * ios-checks  — automatic analyze + unit tests on push / pull request.
+#   * ios-release — manual signed IPA build; no TestFlight/App Store publishing.
+#
+# Prerequisites before ios-release can succeed:
+#   1. app/ios/Podfile must exist (the current iOS project does not have one).
+#   2. A Codemagic App Store Connect integration named DARKY_APP_STORE_CONNECT.
+#      If the integration has another name, change the value below.
+#   3. Valid Apple distribution certificate and provisioning profile are managed
+#      by Codemagic through the integration; no certificate secrets are committed.
+#
+# The workflow intentionally has no Android jobs.
+
+workflows:
+  ios-checks:
+    name: iOS checks
+    max_build_duration: 40
+    instance_type: mac_mini_m2
+    environment:
+      flutter: 3.50.0
+      xcode: latest
+      cocoapods: default
+      cache:
+        cache_paths:
+          - $HOME/.pub-cache
+          - $HOME/Library/Caches/CocoaPods
+          - $HOME/Library/Developer/Xcode/DerivedData
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: "*"
+          include: true
+          source: true
+    scripts:
+      - name: Flutter doctor
+        script: flutter doctor -v
+      - name: Get Flutter packages
+        script: |
+          set -euo pipefail
+          cd "$CM_BUILD_DIR/app"
+          flutter pub get
+      - name: Analyze and unit tests
+        script: |
+          set -euo pipefail
+          cd "$CM_BUILD_DIR/app"
+          flutter analyze
+          flutter test
+
+  ios-release:
+    name: iOS signed IPA
+    max_build_duration: 90
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: DARKY_APP_STORE_CONNECT
+    environment:
+      flutter: 3.50.0
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: ru.darky.dance
+      cache:
+        cache_paths:
+          - $HOME/.pub-cache
+          - $HOME/Library/Caches/CocoaPods
+          - $HOME/Library/Developer/Xcode/DerivedData
+    # No triggering block: this workflow is started manually from Codemagic.
+    scripts:
+      - name: Flutter doctor
+        script: flutter doctor -v
+      - name: Get Flutter packages
+        script: |
+          set -euo pipefail
+          cd "$CM_BUILD_DIR/app"
+          flutter pub get
+      - name: Verify and unit tests
+        script: |
+          set -euo pipefail
+          cd "$CM_BUILD_DIR/app"
+          flutter analyze
+          flutter test
+      - name: Install CocoaPods
+        script: |
+          set -euo pipefail
+          cd "$CM_BUILD_DIR/app/ios"
+          if [ ! -f Podfile ]; then
+            echo "ERROR: app/ios/Podfile is missing." >&2
+            echo "Add the standard Flutter Podfile before running the iOS release workflow." >&2
+            exit 1
+          fi
+          pod install --repo-update
+      - name: Configure iOS code signing
+        script: |
+          set -euo pipefail
+          cd "$CM_BUILD_DIR/app"
+          xcode-project use-profiles
+      - name: Build signed IPA
+        script: |
+          set -euo pipefail
+          cd "$CM_BUILD_DIR/app"
+          flutter build ipa --release
+    artifacts:
+      - app/build/ios/ipa/*.ipa
+      - app/build/ios/archive/*.xcarchive
