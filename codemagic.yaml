@@ -92,12 +92,15 @@ workflows:
         script: |
           set -euo pipefail
           cd "$CM_BUILD_DIR/app"
-          xcode-project use-profiles
+          xcode-project use-profiles \
+            --archive-method=app-store \
+            --export-options-plist="$CM_BUILD_DIR/app/ios/ExportOptions.plist"
       - name: Build signed IPA
         script: |
           set -euo pipefail
           cd "$CM_BUILD_DIR/app"
-          flutter build ipa --release
+          flutter build ipa --release \
+            --export-options-plist="$CM_BUILD_DIR/app/ios/ExportOptions.plist"
     artifacts:
       - app/build/ios/ipa/*.ipa
       - app/build/ios/archive/*.xcarchive
